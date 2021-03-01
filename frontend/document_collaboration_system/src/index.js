@@ -13,22 +13,50 @@ import {
   Route,
 } from "react-router-dom";
 import CustomizedSnackbars from "./customAlert";
+import InviteSnackbar from "./inviteAlert";
+import {send_request} from "./send_request";
 
 export const AppContext = createContext();
 
 class Index extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {nickname: "", session_token: "", document: "", customAlert: {alertOpen: false, alertMessage: "", type: ""}};
+    this.state = {
+      nickname: "",
+      session_token: "",
+      document: "",
+      customAlert: {alertOpen: false, alertMessage: "", type: ""},
+      notification: {open: false, setOpen: null, documentName: ""}
+    };
 
     this.updateState = (field) => (value) => {
         this.setState({[field]: value});
+    };
+
+    this.loadNotification = () => {
+      send_request("GET", "invite").then((response_data => {
+        if (response_data !== null) {
+          this.setState({
+            notification: {
+              open: true,
+              setOpen: this.updateState("notification"),
+              documentName: response_data.document,
+            }
+          });
+        }
+      }));
     };
   }
 
   componentDidMount() {
     this.updateState("session_token")(sessionStorage.getItem("token"));
     this.updateState("username")(sessionStorage.getItem("username"));
+    this.timer = setInterval(() => this.loadNotification(), 10000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    this.timer = null;
   }
 
   render() {
@@ -51,6 +79,7 @@ class Index extends React.Component{
             </Switch>
           </Router>
           <CustomizedSnackbars/>
+          <InviteSnackbar notification={this.state.notification}/>
         </AppContext.Provider>
     );
   }

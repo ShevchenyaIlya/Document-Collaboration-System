@@ -6,9 +6,12 @@ import './css/base.css';
 import {send_request} from "./send_request";
 import {useHistory} from "react-router-dom";
 import {AppContext} from "./index";
+import InviteUserDialog from "./inviteUserDialog";
+
 
 export default function CustomMenu({document, readOnly, setMode}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [inviteDialog, openDialog] = React.useState(false);
   const history = useHistory();
   const {alertContent} = useContext(AppContext);
 
@@ -72,7 +75,9 @@ export default function CustomMenu({document, readOnly, setMode}) {
         <MenuItem onClick={documentOperation("archive")}>Archive</MenuItem>
         <MenuItem onClick={deleteDocument}>Delete</MenuItem>
         <MenuItem onClick={getDocumentLink}>Link</MenuItem>
+        <MenuItem onClick={() => {openDialog(true); handleClose();}}>Invite</MenuItem>
       </Menu>
+      <InviteUserDialog document={document} openDialog={inviteDialog} setOpen={openDialog}/>
     </div>
   );
 }
