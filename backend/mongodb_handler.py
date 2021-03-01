@@ -133,8 +133,19 @@ class MongoDBHandler:
 
         return None
 
-    def select_all_documents(self) -> List:
-        return list(self.db.documents.find({}))
+    def select_document(self, company: str, user_id: ObjectId) -> List:
+        documents = self.select_company_documents(company)
+        permissions = self.get_user_permissions(user_id)
+
+        if len(permissions) != 0:
+            documents.extend(
+                [
+                    self.find_document(str(permission["document"]))
+                    for permission in permissions
+                ]
+            )
+
+        return documents
 
     def select_company_documents(self, company: str) -> List:
         return list(self.db.documents.find({"company": company}))
@@ -175,8 +186,18 @@ class MongoDBHandler:
         return self.db.invites.find_one({"user": user_id})
 
     def remove_invite(self, user_id: ObjectId, document_id: ObjectId) -> None:
-        self.db.comments.delete_one({"user": user_id, "invite_document": document_id})
+        self.db.invites.delete_one({"user": user_id, "invite_document": document_id})
+
+    def remove_invite_by_id(self, invite_id: ObjectId) -> None:
+        self.db.invites.delete_one({"_id": invite_id})
 
     def add_invite(self, user_id: ObjectId, document_id: ObjectId) -> None:
         invite = {"user": user_id, "invite_document": document_id}
         self.db.invites.update_one(invite, {"$set": invite}, upsert=True)
+
+    def accept_invite(self, document_id: str, user_id: ObjectId) -> None:
+        permission = {"document": document_id, "user": user_id}
+        self.db.permissions.update_one(permission, {"$set": permission}, upsert=True)
+
+    def get_user_permissions(self, user_id: ObjectId) -> List:
+        return list(self.db.permissions.find({"user": user_id}))

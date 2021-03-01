@@ -87,7 +87,7 @@ def get_documents() -> Tuple[Any, int]:
     user_identifier = get_jwt_identity()
     user: Dict = cast(Dict, mongo.find_user_by_id(ObjectId(user_identifier)))
 
-    documents = mongo.select_company_documents(user["company"])
+    documents = mongo.select_document(user["company"], user["_id"])
 
     for document in documents:
         document.pop("content")
@@ -209,8 +209,18 @@ def invite() -> Tuple[Any, int]:
     if (user_invite := mongo.select_invite(user_id)) is None:
         return jsonify({}), 204
     else:
-        document = cast(Dict, mongo.find_document(str(user_invite["invite_document"])))
-        return jsonify({"document": document["document_name"]}), 200
+        document_id = str(user_invite["invite_document"])
+        document = cast(Dict, mongo.find_document(document_id))
+        return (
+            jsonify(
+                {
+                    "document_name": document["document_name"],
+                    "document_id": str(document["_id"]),
+                    "invite_id": str(user_invite["_id"]),
+                }
+            ),
+            200,
+        )
 
 
 @app.route('/invite', methods=["POST"])
@@ -223,12 +233,40 @@ def create_invite() -> Tuple[Any, int]:
         return jsonify({}), 400
 
     user = mongo.find_user_by_name(body["username"])
-
     if user is None or str(user["_id"]) == user_identifier:
         return jsonify({"message": "Invalid identification data!"}), 403
 
+    document = cast(Dict, mongo.find_document(body["document"]))
+
+    if (
+        document["company"]
+        != cast(Dict, mongo.find_user_by_id(ObjectId(user_identifier)))["company"]
+    ):
+        return jsonify({"message": "You should have permissions for this action!"}), 403
+
     mongo.add_invite(user["_id"], ObjectId(body["document"]))
-    return jsonify({}), 200
+    return jsonify(), 200
+
+
+@app.route('/invite/<invite_id>', methods=["DELETE", "POST"])
+@jwt_required()
+def accept_invite(invite_id: str) -> Tuple[Any, int]:
+    if not ObjectId.is_valid(invite_id):
+        return jsonify(), 400
+
+    invite_id = ObjectId(invite_id)
+
+    if request.method == "POST":
+        body = request.get_json()
+
+        if body is None:
+            return jsonify(), 400
+
+        mongo.accept_invite(body["document_id"], ObjectId(get_jwt_identity()))
+
+    mongo.remove_invite_by_id(invite_id)
+
+    return jsonify(), 200
 
 
 @app.after_request
