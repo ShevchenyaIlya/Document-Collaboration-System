@@ -26,7 +26,7 @@ class Index extends React.Component{
       session_token: "",
       document: "",
       customAlert: {alertOpen: false, alertMessage: "", type: ""},
-      notification: {open: false, setOpen: null, documentName: ""}
+      notification: {open: false, setOpen: null, documentName: "", inviteId: ""}
     };
 
     this.updateState = (field) => (value) => {
@@ -40,7 +40,9 @@ class Index extends React.Component{
             notification: {
               open: true,
               setOpen: this.updateState("notification"),
-              documentName: response_data.document,
+              documentName: response_data.document_name,
+              documentId: response_data.document_id,
+              inviteId: response_data.invite_id,
             }
           });
         }

@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import {send_request} from "./send_request";
 
 export default function InviteSnackbar({notification}) {
   const handleClose = (event, reason) => {
@@ -10,7 +11,21 @@ export default function InviteSnackbar({notification}) {
       return;
     }
 
-    notification.setOpen({open: false});
+    closeSnackbar();
+  };
+
+  const closeSnackbar = () => {
+    notification.setOpen({open: false, setOpen: notification.setOpen, documentName: "", documentId: "", inviteId: ""});
+  };
+
+  const undoInvite = () => {
+    send_request("DELETE", "invite/" + notification.inviteId).then();
+    closeSnackbar();
+  };
+
+  const confirmInvite = () => {
+    send_request("POST", "invite/" + notification.inviteId, JSON.stringify({document_id: notification.documentId})).then();
+    closeSnackbar();
   };
 
   return (
@@ -26,10 +41,10 @@ export default function InviteSnackbar({notification}) {
         message={"You invited to '" + notification.documentName + "'!"}
         action={
           <React.Fragment>
-            <Button color="secondary" size="small" onClick={handleClose}>
-              Confirm
+            <Button color="secondary" size="small" onClick={confirmInvite}>
+              Accept
             </Button>
-            <Button color="secondary" size="small" onClick={handleClose}>
+            <Button color="secondary" size="small" onClick={undoInvite}>
               Undo
             </Button>
             <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
