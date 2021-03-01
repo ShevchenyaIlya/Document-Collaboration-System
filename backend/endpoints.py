@@ -13,11 +13,18 @@ from .document_status import Status
 from .mongodb_handler import MongoDBHandler
 from .role import Role
 
-app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
-app.config["JWT_SECRET_KEY"] = "super-secret-key"
-jwt = JWTManager(app)
+
+def create_flask_app() -> Flask:
+    application = Flask(__name__)
+    application.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
+    application.config["JWT_SECRET_KEY"] = "super-secret-key"
+
+    return application
+
+
+app = create_flask_app()
 mongo = MongoDBHandler()
+jwt = JWTManager(app)
 
 
 @app.route('/login', methods=["POST"])
@@ -192,6 +199,36 @@ def get_document_comments(document_id: str) -> Tuple[Any, int]:
         comment["_id"] = str(comment["_id"])
 
     return jsonify(comments), 200
+
+
+@app.route('/invite', methods=["GET"])
+@jwt_required()
+def invite() -> Tuple[Any, int]:
+    user_id = ObjectId(get_jwt_identity())
+
+    if (user_invite := mongo.select_invite(user_id)) is None:
+        return jsonify({}), 204
+    else:
+        document = cast(Dict, mongo.find_document(str(user_invite["invite_document"])))
+        return jsonify({"document": document["document_name"]}), 200
+
+
+@app.route('/invite', methods=["POST"])
+@jwt_required()
+def create_invite() -> Tuple[Any, int]:
+    body = request.get_json()
+    user_identifier = get_jwt_identity()
+
+    if body is None or not ObjectId.is_valid(body["document"]):
+        return jsonify({}), 400
+
+    user = mongo.find_user_by_name(body["username"])
+
+    if user is None or str(user["_id"]) == user_identifier:
+        return jsonify({"message": "Invalid identification data!"}), 403
+
+    mongo.add_invite(user["_id"], ObjectId(body["document"]))
+    return jsonify({}), 200
 
 
 @app.after_request

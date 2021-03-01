@@ -170,3 +170,13 @@ class MongoDBHandler:
 
     def get_document_comments(self, document_id: str) -> List:
         return list(self.db.comments.find({"document_id": document_id}))
+
+    def select_invite(self, user_id: ObjectId) -> Optional[Dict]:
+        return self.db.invites.find_one({"user": user_id})
+
+    def remove_invite(self, user_id: ObjectId, document_id: ObjectId) -> None:
+        self.db.comments.delete_one({"user": user_id, "invite_document": document_id})
+
+    def add_invite(self, user_id: ObjectId, document_id: ObjectId) -> None:
+        invite = {"user": user_id, "invite_document": document_id}
+        self.db.invites.update_one(invite, {"$set": invite}, upsert=True)
