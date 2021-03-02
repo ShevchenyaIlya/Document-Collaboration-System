@@ -201,3 +201,17 @@ class MongoDBHandler:
 
     def get_user_permissions(self, user_id: ObjectId) -> List:
         return list(self.db.permissions.find({"user": user_id}))
+
+    def check_user_permissions(self, user_id: ObjectId, document_id: str) -> bool:
+        user: Dict = cast(Dict, self.find_user_by_id(user_id))
+        document: Dict = cast(Dict, self.find_document(document_id))
+        have_permissions = False
+
+        if (
+            document["company"] == user["company"]
+            or self.db.permissions.find_one({"user": user_id, "document": document_id})
+            is not None
+        ):
+            have_permissions = True
+
+        return have_permissions

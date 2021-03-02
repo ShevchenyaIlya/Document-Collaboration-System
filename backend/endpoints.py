@@ -55,17 +55,18 @@ def create_document() -> Tuple[Any, int]:
 @jwt_required()
 def update_document_content(identifier: str) -> Tuple[Any, int]:
     if request.method == "GET":
-        document_content = mongo.find_document(identifier)
+        if mongo.check_user_permissions(ObjectId(get_jwt_identity()), identifier):
+            document_content = mongo.find_document(identifier)
 
-        if document_content is not None:
-            return (
-                jsonify(
-                    content=document_content["content"],
-                    id=str(document_content["_id"]),
-                    status=document_content["status"],
-                ),
-                200,
-            )
+            if document_content is not None:
+                return (
+                    jsonify(
+                        content=document_content["content"],
+                        id=str(document_content["_id"]),
+                        status=document_content["status"],
+                    ),
+                    200,
+                )
 
         return jsonify({}), 404
     elif request.method == "PUT":
@@ -258,11 +259,13 @@ def accept_invite(invite_id: str) -> Tuple[Any, int]:
 
     if request.method == "POST":
         body = request.get_json()
+        user_id = ObjectId(get_jwt_identity())
 
         if body is None:
             return jsonify(), 400
 
-        mongo.accept_invite(body["document_id"], ObjectId(get_jwt_identity()))
+        if not mongo.check_user_permissions(user_id, body["document_id"]):
+            mongo.accept_invite(body["document_id"], user_id)
 
     mongo.remove_invite_by_id(invite_id)
 
