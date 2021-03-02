@@ -27,7 +27,7 @@ export default function FormDialog({openModalWindow, setOpen, document, selected
       }
     });
     setComment("");
-    setOpen(false);
+    handleClose();
   };
 
   return (

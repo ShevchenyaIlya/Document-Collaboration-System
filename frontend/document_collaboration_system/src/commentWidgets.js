@@ -81,9 +81,9 @@ export function CommentsDialog({open, setOpen, comments, setOpenCommentEditor}) 
              Close
            </Button>
          </DialogActions>
-       </Dialog>
-   );
- }
+      </Dialog>
+  );
+}
 
 
 export function EditCommentDialog({openedComment, setOpen, comments, setComments}) {
@@ -152,7 +152,7 @@ export function EditCommentDialog({openedComment, setOpen, comments, setComments
                   />
               </>
           }
-         </DialogContent>
+        </DialogContent>
 
         <DialogActions>
           { openedComment.comment !== null && openedComment.comment.author === sessionStorage.getItem("username") &&

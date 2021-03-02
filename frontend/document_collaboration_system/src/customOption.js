@@ -10,14 +10,7 @@ export default class CustomOption extends Component {
   };
 
   addComment = () => {
-    this.props.setOpen(true);
     const { editorState, onChange } = this.props;
-    const contentState = Modifier.applyInlineStyle(
-      editorState.getCurrentContent(),
-      editorState.getSelection(),
-      'COMMENT',
-    );
-    onChange(EditorState.push(editorState, contentState, "change-inline-style"));
 
     const selectionState = editorState.getSelection();
     const anchorKey = selectionState.getAnchorKey();
@@ -26,7 +19,19 @@ export default class CustomOption extends Component {
     const start = selectionState.getStartOffset();
     const end = selectionState.getEndOffset();
     const selectedText = currentContentBlock.getText().slice(start, end);
-    this.props.setSelectedText(selectedText);
+
+    if (selectedText !== "") {
+      this.props.setSelectedText(selectedText);
+
+
+      this.props.setOpen(true);
+      const contentState = Modifier.applyInlineStyle(
+          editorState.getCurrentContent(),
+          editorState.getSelection(),
+          'COMMENT',
+      );
+      onChange(EditorState.push(editorState, contentState, "change-inline-style"));
+    }
   };
 
   render() {
