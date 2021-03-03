@@ -88,6 +88,10 @@ body {
     float: right;
 }
 
+.errorPage h1, h2{
+    text-align: center;
+}
+
 @media screen and (max-width: 500px) {
     .navbar a {
         float: none;
