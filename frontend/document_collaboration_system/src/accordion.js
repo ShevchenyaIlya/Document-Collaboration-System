@@ -1,23 +1,23 @@
-import React, {useContext, useState} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {Button, TextField} from "@material-ui/core";
-import {send_request} from "./send_request";
-import {useHistory} from "react-router-dom";
-import {AppContext} from "./index";
+import React, { useContext, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { Button, TextField } from "@material-ui/core";
+import { send_request } from "./send_request";
+import { useHistory } from "react-router-dom";
+import { AppContext } from "./index";
 import "./css/base.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
+    flexBasis: "33.33%",
     flexShrink: 0,
   },
   secondaryHeading: {
@@ -26,10 +26,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ControlledAccordions({setDocument}) {
+export default function ControlledAccordions({ setDocument }) {
   const classes = useStyles();
   const history = useHistory();
-  const {alertContent} = useContext(AppContext);
+  const { alertContent } = useContext(AppContext);
   const [expanded, setExpanded] = React.useState(false);
   const [documentIdentifier, setDocumentName] = useState("");
 
@@ -40,24 +40,33 @@ export default function ControlledAccordions({setDocument}) {
   const submitDocumentCreating = (event) => {
     event.preventDefault();
     if (sessionStorage.getItem("username") === null) {
-      alertContent.handler({alertOpen: true, alertMessage: "Please login!", type: "warning"});
+      alertContent.handler({
+        alertOpen: true,
+        alertMessage: "Please login!",
+        type: "warning",
+      });
       history.push("login");
-    }
-    else {
+    } else {
       send_request("POST", "document", documentIdentifier).then((data) => {
         if (data !== null) {
-          const {message} = data;
+          const { message } = data;
 
-          if (typeof message === 'undefined') {
+          if (typeof message === "undefined") {
             setDocument(data);
             history.push("document/" + data);
+          } else {
+            alertContent.handler({
+              alertOpen: true,
+              alertMessage: message,
+              type: "error",
+            });
           }
-          else {
-            alertContent.handler({alertOpen: true, alertMessage: message, type: "error"});
-          }
-        }
-        else {
-          alertContent.handler({alertOpen: true, alertMessage: "Please use another document name!", type: "warning"});
+        } else {
+          alertContent.handler({
+            alertOpen: true,
+            alertMessage: "Please use another document name!",
+            type: "warning",
+          });
         }
       });
     }
@@ -66,16 +75,22 @@ export default function ControlledAccordions({setDocument}) {
   const submitDocumentOpening = (event) => {
     event.preventDefault();
     if (sessionStorage.getItem("username") === null) {
-      alertContent.handler({alertOpen: true, alertMessage: "Please login!", type: "warning"});
+      alertContent.handler({
+        alertOpen: true,
+        alertMessage: "Please login!",
+        type: "warning",
+      });
       history.push("login");
-    }
-    else {
+    } else {
       send_request("GET", "document/" + documentIdentifier).then((data) => {
         if (data !== null) {
           history.push("document/" + data.id);
-        }
-        else {
-          alertContent.handler({alertOpen: true, alertMessage: "Please use another document name!", type: "warning"});
+        } else {
+          alertContent.handler({
+            alertOpen: true,
+            alertMessage: "Please use another document name!",
+            type: "warning",
+          });
         }
       });
     }
@@ -83,25 +98,47 @@ export default function ControlledAccordions({setDocument}) {
 
   return (
     <div className="createDocument">
-      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+      <Accordion
+        expanded={expanded === "panel1"}
+        onChange={handleChange("panel1")}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
           <Typography className={classes.heading}>Create document</Typography>
-          <Typography className={classes.secondaryHeading}>New document for collaborative work</Typography>
+          <Typography className={classes.secondaryHeading}>
+            New document for collaborative work
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form className={classes.root} noValidate autoComplete="off" onSubmit={submitDocumentCreating}>
+          <form
+            className={classes.root}
+            noValidate
+            autoComplete="off"
+            onSubmit={submitDocumentCreating}
+          >
             <div>
-              <TextField id="outlined-basic" label="Document identifier" variant="outlined" className="documentInput" value={documentIdentifier} onChange={(event) => setDocumentName(event.target.value)}/>
+              <TextField
+                id="outlined-basic"
+                label="Document identifier"
+                variant="outlined"
+                className="documentInput"
+                value={documentIdentifier}
+                onChange={(event) => setDocumentName(event.target.value)}
+              />
             </div>
-            <Button variant="outlined" type="submit">Create</Button>
+            <Button variant="outlined" type="submit">
+              Create
+            </Button>
           </form>
         </AccordionDetails>
       </Accordion>
-      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+      <Accordion
+        expanded={expanded === "panel2"}
+        onChange={handleChange("panel2")}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
@@ -110,11 +147,25 @@ export default function ControlledAccordions({setDocument}) {
           <Typography className={classes.heading}>Open document</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form className={classes.root} noValidate autoComplete="off" onSubmit={submitDocumentOpening}>
+          <form
+            className={classes.root}
+            noValidate
+            autoComplete="off"
+            onSubmit={submitDocumentOpening}
+          >
             <div>
-              <TextField id="outlined-basic" label="Document identifier" variant="outlined" className="documentInput" value={documentIdentifier} onChange={(event) => setDocumentName(event.target.value)}/>
+              <TextField
+                id="outlined-basic"
+                label="Document identifier"
+                variant="outlined"
+                className="documentInput"
+                value={documentIdentifier}
+                onChange={(event) => setDocumentName(event.target.value)}
+              />
             </div>
-            <Button variant="outlined" type="submit">Open</Button>
+            <Button variant="outlined" type="submit">
+              Open
+            </Button>
           </form>
         </AccordionDetails>
       </Accordion>

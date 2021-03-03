@@ -6,12 +6,12 @@ import React from "react";
 
 function DocumentList() {
   return (
-      <div className="documentList">
-          <Header/>
-          <Navbar />
-          <List/>
-          <Footer/>
-      </div>
+    <div className="documentList">
+      <Header />
+      <Navbar />
+      <List />
+      <Footer />
+    </div>
   );
 }
 

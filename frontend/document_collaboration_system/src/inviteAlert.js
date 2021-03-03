@@ -1,13 +1,13 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import {send_request} from "./send_request";
+import React from "react";
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import { send_request } from "./send_request";
 
-export default function InviteSnackbar({notification}) {
+export default function InviteSnackbar({ notification }) {
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -15,7 +15,13 @@ export default function InviteSnackbar({notification}) {
   };
 
   const closeSnackbar = () => {
-    notification.setOpen({open: false, setOpen: notification.setOpen, documentName: "", documentId: "", inviteId: ""});
+    notification.setOpen({
+      open: false,
+      setOpen: notification.setOpen,
+      documentName: "",
+      documentId: "",
+      inviteId: "",
+    });
   };
 
   const undoInvite = () => {
@@ -24,7 +30,11 @@ export default function InviteSnackbar({notification}) {
   };
 
   const confirmInvite = () => {
-    send_request("POST", "invite/" + notification.inviteId, JSON.stringify({document_id: notification.documentId})).then();
+    send_request(
+      "POST",
+      "invite/" + notification.inviteId,
+      JSON.stringify({ document_id: notification.documentId })
+    ).then();
     closeSnackbar();
   };
 
@@ -32,8 +42,8 @@ export default function InviteSnackbar({notification}) {
     <div>
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
+          vertical: "bottom",
+          horizontal: "left",
         }}
         open={notification.open}
         autoHideDuration={10000}
@@ -47,7 +57,12 @@ export default function InviteSnackbar({notification}) {
             <Button color="secondary" size="small" onClick={undoInvite}>
               Undo
             </Button>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleClose}
+            >
               <CloseIcon fontSize="small" />
             </IconButton>
           </React.Fragment>
