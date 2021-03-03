@@ -12,6 +12,10 @@ import CustomizedSnackbars from "./customAlert";
 import InviteSnackbar from "./inviteAlert";
 import { send_request } from "./send_request";
 import Messages from "./chat";
+import {Error404} from "./error";
+import Header from "./header";
+import Navbar from "./navbar";
+import Footer from "./footer";
 
 export const AppContext = createContext();
 
@@ -79,20 +83,30 @@ class Index extends React.Component {
             <Route exact path="/login">
               <Login />
             </Route>
-            <Route path="/document">
-              <App
-                document={this.state.document}
-                setDocument={this.updateState("document")}
-              />
+            <Route path="/api">
+              <Header />
+              <Navbar />
+              <Switch>
+                <Route path="/api/document">
+                  <App
+                    document={this.state.document}
+                    setDocument={this.updateState("document")}
+                  />
+                </Route>
+                <Route path="/api/messages">
+                  <Messages />
+                </Route>
+                <Route exact path="/api/documents">
+                  <DocumentList />
+                </Route>
+                <Route exact path="/api/">
+                  <Home setDocument={this.updateState("document")} />
+                </Route>
+              </Switch>
+              <Footer/>
             </Route>
-            <Route path="/messages">
-              <Messages />
-            </Route>
-            <Route exact path="/documents">
-              <DocumentList />
-            </Route>
-            <Route exact path="/">
-              <Home setDocument={this.updateState("document")} />
+            <Route path="*">
+              <Error404/>
             </Route>
           </Switch>
         </Router>

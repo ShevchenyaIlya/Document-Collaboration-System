@@ -1,8 +1,5 @@
 import React from "react";
 import "./css/App.css";
-import Header from "./header";
-import Footer from "./footer";
-import Navbar from "./navbar";
 import DocumentEditor from "./editor";
 import { useHistory } from "react-router-dom";
 
@@ -14,13 +11,10 @@ function App({ document, setDocument }) {
 
   return (
     <div className="App">
-      <Header />
-      <Navbar />
       <DocumentEditor
         document={document !== "" ? document : document_identifier}
         setDocument={setDocument}
       />
-      <Footer />
     </div>
   );
 }

@@ -45,7 +45,7 @@ export default function ControlledAccordions({ setDocument }) {
         alertMessage: "Please login!",
         type: "warning",
       });
-      history.push("login");
+      history.push("/login");
     } else {
       send_request("POST", "document", documentIdentifier).then((data) => {
         if (data !== null) {

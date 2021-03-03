@@ -13,7 +13,7 @@ function Navbar() {
     event.preventDefault();
     sessionStorage.clear();
     setUsername("");
-    history.push("/");
+    history.push("/api");
     alertContent.handler({
       alertOpen: true,
       alertMessage: "You logout!",
@@ -28,13 +28,13 @@ function Navbar() {
   return (
     <div className="navbar">
       <div>
-        <Link className="active" to="/">
+        <Link className="active" to="/api/">
           <i className="fa fa-fw fa-home"></i> Home
         </Link>
-        <Link to="/documents">
+        <Link to="/api/documents">
           <i className="fa fa-fw fa-book"></i> Documents
         </Link>
-        <Link to="/messages">
+        <Link to="/api/messages">
           <i className="fa fa-fw fa-comments"></i> Messages
         </Link>
         <Link className="right" to="/login">

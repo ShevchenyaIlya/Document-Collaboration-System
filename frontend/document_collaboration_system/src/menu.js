@@ -64,7 +64,7 @@ export default function CustomMenu({ document, readOnly, setMode }) {
           alertMessage: "Document deleted!",
           type: "info",
         });
-        history.push("/");
+        history.push("/api");
       }
     });
     handleClose();

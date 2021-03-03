@@ -28,7 +28,7 @@ class ControlledEditor extends Component {
     this.loadInitialContent = () => {
       send_request("GET", "document/" + this.document_id).then((content) => {
         if (content === null) {
-          this.props.history.push("/");
+          this.props.history.push("/api");
         } else if (Object.keys(content.content).length !== 0) {
           if (content.status === "Archive") {
             this.props.setMode(true);

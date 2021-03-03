@@ -30,7 +30,7 @@ function Login() {
         sessionStorage.setItem("token", token);
         sessionStorage.setItem("id", id);
         sessionStorage.setItem("username", username);
-        history.push("");
+        history.push("/api");
       }
     });
   };
@@ -55,7 +55,7 @@ function Login() {
         <Button type="submit" variant="outlined">
           Login
         </Button>
-        <Link to="/">Home</Link>
+        <Link to="/api">Home</Link>
       </form>
     </Paper>
   );
