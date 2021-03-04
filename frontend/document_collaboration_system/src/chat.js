@@ -1,36 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import "./css/base.css";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MessageIcon from "@material-ui/icons/Message";
 import ListItemText from "@material-ui/core/ListItemText";
 import List from "@material-ui/core/List";
-import { send_request } from "./send_request";
+import { api } from "./service";
+import { AppContext } from "./index";
+import _ from "lodash";
+import { useHistory } from "react-router-dom";
 
 function Messages() {
   const [messages, setMessages] = useState([]);
+  const { alertContent } = useContext(AppContext);
+  const history = useHistory();
 
-  const updateMessages = () => {
-    console.log("Update");
-    send_request("GET", "messages").then((response) => {
+  const updateMessages = useCallback(() => {
+    api.getMessages().then((response) => {
       if (response !== null) {
-        setMessages(response);
+        if (!_.isEqual(response, messages)) {
+          setMessages(response);
+        }
       }
     });
-  };
+  }, [messages]);
 
   useEffect(() => {
-    updateMessages();
-    const timer = setInterval(() => updateMessages(), 5000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+    if (sessionStorage.getItem("token") === null) {
+      alertContent.handler({
+        alertOpen: true,
+        alertMessage: "Please login!",
+        type: "warning",
+      });
+      history.push("/login");
+    } else {
+      updateMessages();
+      const timer = setInterval(() => updateMessages(), 10000);
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [alertContent, history, updateMessages]);
 
   return (
     <div className="chat">
       <List component="nav" aria-label="main mailbox folders">
-        {messages.map((message) => (
+        {_.orderBy(messages, ["send_date"], ["desc"]).map((message) => (
           <ListItem button key={message._id}>
             <ListItemIcon>
               <MessageIcon />

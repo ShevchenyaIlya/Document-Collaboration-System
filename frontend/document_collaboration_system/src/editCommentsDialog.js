@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { send_request } from "./send_request";
 import _ from "lodash";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -8,6 +7,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
+import { api } from "./service";
 
 export default function EditCommentDialog({
   openedComment,
@@ -17,12 +17,13 @@ export default function EditCommentDialog({
 }) {
   const [newCommentText, commentChange] = useState("");
 
-  const updateComment = () => {
-    send_request(
-      "PUT",
-      "comment/" + openedComment.comment._id,
-      JSON.stringify({ comment: newCommentText })
-    ).then();
+  const updateCommentHandler = () => {
+    api
+      .updateComment(
+        openedComment.comment._id,
+        JSON.stringify({ comment: newCommentText })
+      )
+      .then();
     const commentIndex = _.findIndex(comments, function (element) {
       return element._id === openedComment.comment._id;
     });
@@ -31,8 +32,8 @@ export default function EditCommentDialog({
     handleClose();
   };
 
-  const deleteComment = () => {
-    send_request("DELETE", "comment/" + openedComment.comment._id).then();
+  const deleteCommentHandler = () => {
+    api.deleteComment(openedComment.comment._id).then();
     _.remove(comments, function (element) {
       return element._id === openedComment.comment._id;
     });
@@ -96,10 +97,10 @@ export default function EditCommentDialog({
           openedComment.comment.author ===
             sessionStorage.getItem("username") && (
             <>
-              <Button onClick={deleteComment} color="primary">
+              <Button onClick={deleteCommentHandler} color="primary">
                 Delete
               </Button>
-              <Button onClick={updateComment} color="primary">
+              <Button onClick={updateCommentHandler} color="primary">
                 Edit
               </Button>
             </>

@@ -1,8 +1,8 @@
-import React, {Component} from "react";
-import {convertFromRaw, convertToRaw, EditorState} from "draft-js";
-import {send_request} from "./send_request";
+import React, { Component } from "react";
+import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
+import { api } from "./service";
 import _ from "lodash";
-import {Editor} from "react-draft-wysiwyg";
+import { Editor } from "react-draft-wysiwyg";
 import CustomOption from "./customOption";
 
 const styleMap = {
@@ -20,7 +20,7 @@ export default class ControlledEditor extends Component {
     };
 
     this.loadInitialContent = () => {
-      send_request("GET", "document/" + this.document_id).then((content) => {
+      api.getDocument(this.document_id).then((content) => {
         if (content === null) {
           this.props.history.push("/api");
         } else if (Object.keys(content.content).length !== 0) {
@@ -74,11 +74,12 @@ export default class ControlledEditor extends Component {
         this.setState({
           editorState: editorState,
         });
-        send_request(
-          "PUT",
-          "document/" + this.document_id,
-          JSON.stringify(convertToRaw(contentState))
-        ).then();
+        api
+          .updateDocument(
+            this.document_id,
+            JSON.stringify(convertToRaw(contentState))
+          )
+          .then();
       }
     };
   }

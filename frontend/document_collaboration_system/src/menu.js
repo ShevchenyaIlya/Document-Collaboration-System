@@ -3,10 +3,10 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import "./css/base.css";
-import { send_request } from "./send_request";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "./index";
 import InviteUserDialog from "./inviteUserDialog";
+import { api } from "./service";
 
 export default function CustomMenu({ document, readOnly, setMode }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -23,7 +23,7 @@ export default function CustomMenu({ document, readOnly, setMode }) {
   };
 
   const documentOperation = (operation) => () => {
-    send_request("POST", operation + "/" + document).then((response) => {
+    api.changeDocumentState(operation, document).then((response) => {
       if (response === null) {
         alertContent.handler({
           alertOpen: true,
@@ -50,8 +50,8 @@ export default function CustomMenu({ document, readOnly, setMode }) {
     handleClose();
   };
 
-  const deleteDocument = () => {
-    send_request("DELETE", "document/" + document).then((response) => {
+  const handleDocumentDeleting = () => {
+    api.deleteDocument(document).then((response) => {
       if (typeof response.message !== "undefined") {
         alertContent.handler({
           alertOpen: true,
@@ -99,7 +99,7 @@ export default function CustomMenu({ document, readOnly, setMode }) {
         </MenuItem>
         <MenuItem onClick={documentOperation("sign")}>Signing</MenuItem>
         <MenuItem onClick={documentOperation("archive")}>Archive</MenuItem>
-        <MenuItem onClick={deleteDocument}>Delete</MenuItem>
+        <MenuItem onClick={handleDocumentDeleting}>Delete</MenuItem>
         <MenuItem onClick={getDocumentLink}>Link</MenuItem>
         <MenuItem
           onClick={() => {

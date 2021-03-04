@@ -1,9 +1,9 @@
 import { Avatar, Button, Paper, TextField } from "@material-ui/core";
 import React, { useContext, useState } from "react";
-import { send_request } from "./send_request";
 import "./css/login.css";
 import { Link, useHistory } from "react-router-dom";
 import { AppContext } from "./index";
+import { api } from "./service";
 
 function Login() {
   const [textField, setText] = useState("");
@@ -13,7 +13,7 @@ function Login() {
   const handler = (event) => {
     event.preventDefault();
 
-    send_request("POST", "login", textField).then((response_data) => {
+    api.userLogin(textField).then((response_data) => {
       if (response_data === null) {
         alertContent.handler({
           alertOpen: true,

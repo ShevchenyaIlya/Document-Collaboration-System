@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { AppContext } from "./index";
-import { send_request } from "./send_request";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -12,6 +11,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { TextField } from "@material-ui/core";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
+import { api } from "./service";
 
 export default function SendMessageDialog({
   openDialog,
@@ -32,42 +32,33 @@ export default function SendMessageDialog({
     setOpen(false);
   };
 
+  const sendMessage = (users, messageText) => {
+    api
+      .postMessage(JSON.stringify({ to_users: users, message: messageText }))
+      .then((response) => {
+        if (typeof response.message !== "undefined") {
+          alertContent.handler({
+            alertOpen: true,
+            alertMessage: response.message,
+            type: "error",
+          });
+        }
+      });
+  };
+
   const handleSend = () => {
     if (messageMode) {
       if (message !== "" && choice !== "") {
-        send_request(
-          "POST",
-          "message",
-          JSON.stringify({ to_users: choice, message: message })
-        ).then((response) => {
-          if (typeof response.message !== "undefined") {
-            alertContent.handler({
-              alertOpen: true,
-              alertMessage: response.message,
-              type: "error",
-            });
-          }
-        });
+        sendMessage(choice, message);
       }
     } else {
       let usersId = [];
       for (let i = 0; i < users.length; i++) {
         usersId.push(users[i]._id);
       }
+
       if (message !== "") {
-        send_request(
-          "POST",
-          "message",
-          JSON.stringify({ to_users: usersId, message: message })
-        ).then((response) => {
-          if (typeof response.message !== "undefined") {
-            alertContent.handler({
-              alertOpen: true,
-              alertMessage: response.message,
-              type: "error",
-            });
-          }
-        });
+        sendMessage(usersId, message);
       }
     }
     handleClose();

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import { send_request } from "./send_request";
 import EditCommentDialog from "./editCommentsDialog";
 import CommentsDialog from "./commentsDialog";
 import "./css/base.css";
+import { api } from "./service";
 
 export function CommentButton({ document }) {
   const [openCommentsList, setOpenCommentsList] = useState(false);
@@ -14,7 +14,7 @@ export function CommentButton({ document }) {
   const [comments, setComments] = useState([]);
 
   const handleClickOpen = () => {
-    send_request("GET", "comments/" + document).then((response_data) => {
+    api.getComments(document).then((response_data) => {
       setComments(response_data);
     });
 

@@ -15,7 +15,7 @@ import {
 } from "react-router-dom";
 import CustomizedSnackbars from "./customAlert";
 import InviteSnackbar from "./inviteAlert";
-import { send_request } from "./send_request";
+import { api } from "./service";
 import Messages from "./chat";
 import { Error404 } from "./error";
 import Header from "./header";
@@ -45,7 +45,7 @@ class Index extends React.Component {
     };
 
     this.loadNotification = () => {
-      send_request("GET", "invite").then((response_data) => {
+      api.getInvite().then((response_data) => {
         if (response_data !== null) {
           this.setState({
             notification: {

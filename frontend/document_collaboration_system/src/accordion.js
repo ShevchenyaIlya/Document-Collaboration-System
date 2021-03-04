@@ -6,7 +6,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Button, TextField } from "@material-ui/core";
-import { send_request } from "./send_request";
+import { api } from "./service";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "./index";
 import "./css/base.css";
@@ -47,7 +47,7 @@ export default function ControlledAccordions({ setDocument }) {
       });
       history.push("/login");
     } else {
-      send_request("POST", "document", documentIdentifier).then((data) => {
+      api.postDocument(documentIdentifier).then((data) => {
         if (data !== null) {
           const { message } = data;
 
@@ -82,7 +82,7 @@ export default function ControlledAccordions({ setDocument }) {
       });
       history.push("login");
     } else {
-      send_request("GET", "document/" + documentIdentifier).then((data) => {
+      api.getDocument(documentIdentifier).then((data) => {
         if (data !== null) {
           history.push("document/" + data.id);
         } else {

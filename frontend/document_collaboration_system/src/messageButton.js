@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import { send_request } from "./send_request";
 import SendMessageDialog from "./messageDialog";
+import { api } from "./service";
 
 export function MessageButton({ document }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -12,7 +12,7 @@ export function MessageButton({ document }) {
   const [users, setUsers] = React.useState([]);
 
   const personalMessage = (value) => () => {
-    send_request("GET", "users/" + document).then((response) => {
+    api.getUsers(document).then((response) => {
       if (response !== null) {
         setUsers(response);
       }

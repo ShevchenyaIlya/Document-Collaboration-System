@@ -6,8 +6,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { send_request } from "./send_request";
 import { AppContext } from "./index";
+import { api } from "./service";
 
 export default function FormDialog({
   openModalWindow,
@@ -23,25 +23,26 @@ export default function FormDialog({
   };
 
   const handleLeave = () => {
-    send_request(
-      "POST",
-      "comment/" + document,
-      JSON.stringify({ comment: comment, target: selectedText })
-    ).then((response_data) => {
-      if (response_data !== null) {
-        alertContent.handler({
-          alertOpen: true,
-          alertMessage: "Comments created!",
-          type: "success",
-        });
-      } else {
-        alertContent.handler({
-          alertOpen: true,
-          alertMessage: "Something went wrong!",
-          type: "error",
-        });
-      }
-    });
+    api
+      .postComment(
+        document,
+        JSON.stringify({ comment: comment, target: selectedText })
+      )
+      .then((response_data) => {
+        if (response_data !== null) {
+          alertContent.handler({
+            alertOpen: true,
+            alertMessage: "Comments created!",
+            type: "success",
+          });
+        } else {
+          alertContent.handler({
+            alertOpen: true,
+            alertMessage: "Something went wrong!",
+            type: "error",
+          });
+        }
+      });
     setComment("");
     handleClose();
   };
