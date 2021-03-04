@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import _ from "lodash";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -16,6 +16,7 @@ export default function EditCommentDialog({
   setComments,
 }) {
   const [newCommentText, commentChange] = useState("");
+  const onChangeComment = useCallback((event) => commentChange(event.target.value), []);
 
   const updateCommentHandler = () => {
     api
@@ -79,9 +80,7 @@ export default function EditCommentDialog({
               id="comment"
               label="Comment"
               value={newCommentText}
-              onChange={(event) => {
-                commentChange(event.target.value);
-              }}
+              onChange={onChangeComment}
               fullWidth
               disabled={
                 openedComment.comment.author !==

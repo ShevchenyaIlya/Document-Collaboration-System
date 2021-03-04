@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -32,6 +32,7 @@ export default function ControlledAccordions({ setDocument }) {
   const { alertContent } = useContext(AppContext);
   const [expanded, setExpanded] = React.useState(false);
   const [documentIdentifier, setDocumentName] = useState("");
+  const onChangeDocumentName = useCallback((event) => setDocumentName(event.target.value), []);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -53,7 +54,7 @@ export default function ControlledAccordions({ setDocument }) {
 
           if (typeof message === "undefined") {
             setDocument(data);
-            history.push("document/" + data);
+            history.push("/api/document/" + data);
           } else {
             alertContent.handler({
               alertOpen: true,
@@ -84,7 +85,7 @@ export default function ControlledAccordions({ setDocument }) {
     } else {
       api.getDocument(documentIdentifier).then((data) => {
         if (data !== null) {
-          history.push("document/" + data.id);
+          history.push("/api/document/" + data.id);
         } else {
           alertContent.handler({
             alertOpen: true,
@@ -126,7 +127,7 @@ export default function ControlledAccordions({ setDocument }) {
                 variant="outlined"
                 className="documentInput"
                 value={documentIdentifier}
-                onChange={(event) => setDocumentName(event.target.value)}
+                onChange={onChangeDocumentName}
               />
             </div>
             <Button variant="outlined" type="submit">
@@ -160,7 +161,7 @@ export default function ControlledAccordions({ setDocument }) {
                 variant="outlined"
                 className="documentInput"
                 value={documentIdentifier}
-                onChange={(event) => setDocumentName(event.target.value)}
+                onChange={onChangeDocumentName}
               />
             </div>
             <Button variant="outlined" type="submit">

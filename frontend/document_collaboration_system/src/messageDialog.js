@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, {useCallback, useContext} from "react";
 import { AppContext } from "./index";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -20,6 +20,8 @@ export default function SendMessageDialog({
   users,
 }) {
   const [message, setMessage] = React.useState("");
+  const onChangeMessage = useCallback((event) => setMessage(event.target.value), []);
+
   const [choice, setChoice] = React.useState("");
   const { alertContent } = useContext(AppContext);
 
@@ -103,7 +105,7 @@ export default function SendMessageDialog({
           fullWidth={true}
           multiline={true}
           value={message}
-          onChange={(event) => setMessage(event.target.value)}
+          onChange={onChangeMessage}
         />
       </DialogContent>
       <DialogActions>
