@@ -20,7 +20,7 @@ def leave_comment(document_id: str) -> Tuple[Any, int]:
     if comment_id is None:
         return jsonify({}), 400
 
-    return jsonify({"id": str(comment_id)}), 200
+    return jsonify({"id": str(comment_id)}), 201
 
 
 @comment_api.route('/comment/<comment_id>', methods=["DELETE", "PUT"])

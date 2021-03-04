@@ -20,7 +20,7 @@ def create_document() -> Tuple[Any, int]:
     if document_identifier is None:
         return jsonify({"message": "Document already exist!"}), 403
 
-    return jsonify(str(document_identifier)), 200
+    return jsonify(str(document_identifier)), 201
 
 
 @document_api.route('/document/<identifier>', methods=["PUT", "GET", "DELETE"])

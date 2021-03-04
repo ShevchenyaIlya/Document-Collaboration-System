@@ -53,7 +53,7 @@ def create_invite() -> Tuple[Any, int]:
         return jsonify({"message": "You should have permissions for this action!"}), 403
 
     mongo.add_invite(user["_id"], ObjectId(body["document"]))
-    return jsonify(), 200
+    return jsonify(), 201
 
 
 @invite_api.route('/invite/<invite_id>', methods=["DELETE", "POST"])

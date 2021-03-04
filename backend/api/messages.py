@@ -11,7 +11,7 @@ message_api = Blueprint('message_api', __name__)
 
 @message_api.route('/users/<document_id>', methods=["GET"])
 @jwt_required()
-def invite(document_id: str) -> Tuple[Any, int]:
+def get_users_with_permissions(document_id: str) -> Tuple[Any, int]:
     user_id = ObjectId(get_jwt_identity())
 
     document = mongo.find_document(document_id)
@@ -43,7 +43,7 @@ def create_message() -> Tuple[Any, int]:
         for user in body["to_users"]:
             mongo.create_message(user_id, ObjectId(user), body["message"])
 
-    return jsonify(), 200
+    return jsonify(), 201
 
 
 @message_api.route('/messages', methods=["GET"])
