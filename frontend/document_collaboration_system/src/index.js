@@ -7,12 +7,17 @@ import DocumentList from "./documentList";
 import Login from "./login";
 import reportWebVitals from "./reportWebVitals";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import CustomizedSnackbars from "./customAlert";
 import InviteSnackbar from "./inviteAlert";
 import { send_request } from "./send_request";
 import Messages from "./chat";
-import {Error404} from "./error";
+import { Error404 } from "./error";
 import Header from "./header";
 import Navbar from "./navbar";
 import Footer from "./footer";
@@ -103,10 +108,11 @@ class Index extends React.Component {
                   <Home setDocument={this.updateState("document")} />
                 </Route>
               </Switch>
-              <Footer/>
+              <Footer />
             </Route>
+            <Redirect from="/" to="/api" exact />
             <Route path="*">
-              <Error404/>
+              <Error404 />
             </Route>
           </Switch>
         </Router>

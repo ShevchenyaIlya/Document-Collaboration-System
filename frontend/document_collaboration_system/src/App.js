@@ -1,6 +1,6 @@
 import React from "react";
 import "./css/App.css";
-import DocumentEditor from "./editor";
+import DocumentEditor from "./documentEditor";
 import { useHistory } from "react-router-dom";
 
 function App({ document, setDocument }) {
