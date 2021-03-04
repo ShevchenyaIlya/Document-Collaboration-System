@@ -92,6 +92,10 @@ body {
     text-align: center;
 }
 
+.chat {
+    min-height: 600px;
+}
+
 @media screen and (max-width: 500px) {
     .navbar a {
         float: none;
