@@ -150,6 +150,9 @@ class MongoDBHandler:
     def select_company_documents(self, company: str) -> List:
         return list(self.db.documents.find({"company": company}))
 
+    def select_company_users(self, company: str) -> List:
+        return list(self.db.users.find({"company": company}))
+
     def leave_comment(
         self, document_id: str, author: str, comment: str, commented_text: str
     ) -> Optional[Dict]:
@@ -202,6 +205,18 @@ class MongoDBHandler:
     def get_user_permissions(self, user_id: ObjectId) -> List:
         return list(self.db.permissions.find({"user": user_id}))
 
+    def get_users_with_permissions(self, document_id: ObjectId) -> List:
+        permissions_list = list(self.db.permissions.find({"document": document_id}))
+        users = []
+
+        if len(permissions_list) != 0:
+            users = [
+                self.find_user_by_id(permission["_id"])
+                for permission in permissions_list
+            ]
+
+        return users
+
     def check_user_permissions(self, user_id: ObjectId, document_id: str) -> bool:
         user: Dict = cast(Dict, self.find_user_by_id(user_id))
         document: Dict = cast(Dict, self.find_document(document_id))
@@ -215,3 +230,20 @@ class MongoDBHandler:
             have_permissions = True
 
         return have_permissions
+
+    def create_message(
+        self, user_from: ObjectId, user_to: ObjectId, message: str
+    ) -> None:
+        user = self.find_user_by_id(user_to)
+
+        if user:
+            new_message = {
+                "user_from": user_from,
+                "user_to": user["_id"],
+                "message": message,
+                "send_date": datetime.now(),
+            }
+            self.db.messages.update_one(new_message, {"$set": new_message}, upsert=True)
+
+    def select_messages(self, user_id: ObjectId) -> List:
+        return list(self.db.messages.find({"user_to": user_id}))
