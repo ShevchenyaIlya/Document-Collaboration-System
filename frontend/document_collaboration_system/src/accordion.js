@@ -32,7 +32,10 @@ export default function ControlledAccordions({ setDocument }) {
   const { alertContent } = useContext(AppContext);
   const [expanded, setExpanded] = React.useState(false);
   const [documentIdentifier, setDocumentName] = useState("");
-  const onChangeDocumentName = useCallback((event) => setDocumentName(event.target.value), []);
+  const onChangeDocumentName = useCallback(
+    (event) => setDocumentName(event.target.value),
+    []
+  );
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

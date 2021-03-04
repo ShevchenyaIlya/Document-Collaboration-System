@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -16,7 +16,10 @@ export default function EditCommentDialog({
   setComments,
 }) {
   const [newCommentText, commentChange] = useState("");
-  const onChangeComment = useCallback((event) => commentChange(event.target.value), []);
+  const onChangeComment = useCallback(
+    (event) => commentChange(event.target.value),
+    []
+  );
 
   const updateCommentHandler = () => {
     api
@@ -63,7 +66,7 @@ export default function EditCommentDialog({
     >
       <DialogTitle id="alert-dialog-title">{"Comment details!"}</DialogTitle>
       <DialogContent>
-        {openedComment.comment !== null && (
+        {openedComment.comment && (
           <>
             <DialogContentText>
               Author: {openedComment.comment.author}
@@ -92,7 +95,7 @@ export default function EditCommentDialog({
       </DialogContent>
 
       <DialogActions>
-        {openedComment.comment !== null &&
+        {openedComment.comment &&
           openedComment.comment.author ===
             sessionStorage.getItem("username") && (
             <>

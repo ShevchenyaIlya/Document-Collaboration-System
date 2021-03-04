@@ -21,8 +21,8 @@ const useStyles = makeStyles((theme) => ({
 export default function CustomizedSnackbars() {
   const classes = useStyles();
   const { alertContent } = useContext(AppContext);
-  let { configurations, handler } = alertContent;
-  let { alertOpen, alertMessage, type } = configurations;
+  const { configurations, handler } = alertContent;
+  const { alertOpen, alertMessage, type } = configurations;
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {

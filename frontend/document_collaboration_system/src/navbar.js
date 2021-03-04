@@ -28,19 +28,19 @@ function Navbar() {
   return (
     <div className="navbar">
       <div>
-        <Link className="active" to="/api/">
+        <Link className="active link" to="/api/">
           <i className="fa fa-fw fa-home"></i> Home
         </Link>
-        <Link to="/api/documents">
+        <Link className="link" to="/api/documents">
           <i className="fa fa-fw fa-book"></i> Documents
         </Link>
-        <Link to="/api/messages">
+        <Link className="link" to="/api/messages">
           <i className="fa fa-fw fa-comments"></i> Messages
         </Link>
-        <Link className="right" to="/login">
+        <Link className="right link" to="/login">
           <i className="fa fa-fw fa-user"></i> Sign In
         </Link>
-        <Link className="right" to="#" onClick={logoutUser}>
+        <Link className="right link" to="#" onClick={logoutUser}>
           {username}
         </Link>
       </div>

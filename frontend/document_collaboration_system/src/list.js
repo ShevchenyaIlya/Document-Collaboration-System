@@ -1,12 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import DescriptionIcon from "@material-ui/icons/Description";
 import { useHistory } from "react-router-dom";
+import DocumentListItem from "./documentListItem";
 import { api } from "./service";
 import { AppContext } from "./index";
 
@@ -47,34 +44,16 @@ export default function SimpleList() {
     }
   }, []);
 
-  const handler = (identifier) => (event) => {
-    history.push("document/" + identifier);
-  };
-
   return (
     <div className={classes.container}>
       <div className={classes.root}>
         <List component="nav" aria-label="main mailbox folders">
           {documents.map((single_document) => (
-            <ListItem
-              button
+            <DocumentListItem
               key={single_document._id}
-              onClick={handler(single_document._id)}
-            >
-              <ListItemIcon>
-                <DescriptionIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={single_document.document_name}
-                secondary={single_document.creation_date}
-              />
-              <ListItemText
-                primary={"Creator"}
-                secondary={single_document.creator}
-              />
-              <ListItemText secondary={single_document.status} />
-              <ListItemText secondary={single_document._id} />
-            </ListItem>
+              history={history}
+              single_document={single_document}
+            />
           ))}
         </List>
         <Divider />

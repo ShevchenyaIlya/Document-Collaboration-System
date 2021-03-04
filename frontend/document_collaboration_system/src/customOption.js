@@ -1,17 +1,14 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { EditorState, Modifier } from "draft-js";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 
-export default class CustomOption extends Component {
-  static propTypes = {
-    onChange: PropTypes.func,
-    editorState: PropTypes.object,
-  };
-
-  addComment = () => {
-    const { editorState, onChange } = this.props;
-
+export default function CustomOption({
+  editorState,
+  onChange,
+  setSelectedText,
+  setOpen,
+}) {
+  const addComment = () => {
     const selectionState = editorState.getSelection();
     const anchorKey = selectionState.getAnchorKey();
     const currentContent = editorState.getCurrentContent();
@@ -21,9 +18,9 @@ export default class CustomOption extends Component {
     const selectedText = currentContentBlock.getText().slice(start, end);
 
     if (selectedText !== "") {
-      this.props.setSelectedText(selectedText);
+      setSelectedText(selectedText);
 
-      this.props.setOpen(true);
+      setOpen(true);
       const contentState = Modifier.applyInlineStyle(
         editorState.getCurrentContent(),
         editorState.getSelection(),
@@ -35,11 +32,9 @@ export default class CustomOption extends Component {
     }
   };
 
-  render() {
-    return (
-      <div title="Comment" id="customEditorButton" onClick={this.addComment}>
-        <ChatBubbleIcon />
-      </div>
-    );
-  }
+  return (
+    <div title="Comment" id="customEditorButton" onClick={addComment}>
+      <ChatBubbleIcon />
+    </div>
+  );
 }

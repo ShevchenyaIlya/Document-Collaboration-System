@@ -1,4 +1,4 @@
-import React, {useCallback, useContext} from "react";
+import React, { useCallback, useContext } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import { TextField } from "@material-ui/core";
@@ -9,7 +9,10 @@ import { AppContext } from "./index";
 
 export default function InviteUserDialog({ openDialog, setOpen, document }) {
   const [username, setUsername] = React.useState("");
-  const onChangeUsername = useCallback((event) => setUsername(event.target.value), []);
+  const onChangeUsername = useCallback(
+    (event) => setUsername(event.target.value),
+    []
+  );
   const { alertContent } = useContext(AppContext);
 
   const handleClose = () => {

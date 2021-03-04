@@ -2,13 +2,10 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import CommentIcon from "@material-ui/icons/Comment";
-import ListItemText from "@material-ui/core/ListItemText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import React from "react";
+import React, { useCallback } from "react";
+import DialogListItem from "./dialogListItem";
 
 export default function CommentsDialog({
   open,
@@ -20,12 +17,15 @@ export default function CommentsDialog({
     setOpen(false);
   };
 
-  const listItemClick = (id) => () => {
-    setOpenCommentEditor({
-      open: true,
-      comment: comments.find((element) => element._id === id),
-    });
-  };
+  const onClickListItem = useCallback(
+    (id) => () => {
+      setOpenCommentEditor({
+        open: true,
+        comment: comments.find((element) => element._id === id),
+      });
+    },
+    [comments, setOpenCommentEditor]
+  );
 
   return (
     <Dialog
@@ -42,29 +42,11 @@ export default function CommentsDialog({
       <DialogContent>
         <List component="nav" aria-label="main mailbox folders">
           {comments.map((single_comment) => (
-            <ListItem
-              button
+            <DialogListItem
               key={single_comment._id}
-              onClick={listItemClick(single_comment._id)}
-            >
-              <ListItemIcon>
-                <CommentIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={single_comment.author}
-                secondary={new Date(
-                  single_comment.creation_date
-                ).toDateString()}
-              />
-              <ListItemText
-                primary="Selected:"
-                secondary={single_comment.commented_text}
-              />
-              <ListItemText
-                primary="Comment:"
-                secondary={single_comment.comment}
-              />
-            </ListItem>
+              clickHandler={onClickListItem(single_comment._id)}
+              single_comment={single_comment}
+            />
           ))}
         </List>
       </DialogContent>

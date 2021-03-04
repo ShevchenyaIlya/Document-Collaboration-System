@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState} from "react";
+import React, { useCallback, useContext, useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -16,7 +16,10 @@ export default function FormDialog({
   selectedText,
 }) {
   const [comment, setComment] = useState("");
-  const onChangeComment = useCallback((event) => setComment(event.target.value), []);
+  const onChangeComment = useCallback(
+    (event) => setComment(event.target.value),
+    []
+  );
 
   const { alertContent } = useContext(AppContext);
 
