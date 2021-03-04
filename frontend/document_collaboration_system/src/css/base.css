@@ -28,7 +28,7 @@ body {
     margin-right: 50px;
 }
 
-.navbar div a {
+.navbar .link {
     float: left;
     text-align: center;
     padding: 12px;
@@ -37,7 +37,7 @@ body {
     font-size: 17px;
 }
 
-.navbar div a:hover {
+.navbar .link:hover {
     background-color:rgba(0, 0, 0, 0.5);
 }
 
@@ -45,7 +45,7 @@ body {
     background-color: darkslategray;
 }
 
-.navbar div a.right, .navbar div button.right {
+.navbar .link.right {
     float: right;
 }
 
