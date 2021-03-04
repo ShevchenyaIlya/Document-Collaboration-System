@@ -16,7 +16,7 @@ def invite(document_id: str) -> Tuple[Any, int]:
 
     document = mongo.find_document(document_id)
     if document is None:
-        return jsonify({"message", "No such document"}), 404
+        return jsonify({"message": "No such document"}), 404
 
     users = mongo.select_company_users(document["company"])
     users.extend(mongo.get_users_with_permissions(document["_id"]))
