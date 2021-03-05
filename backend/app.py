@@ -2,7 +2,6 @@ from flask import Flask, Response
 from flask_jwt_extended import JWTManager
 
 from .api.auth import auth
-from .api.comments import comment_api
 from .api.documents import document_api
 from .api.invites import invite_api
 from .api.messages import message_api
@@ -24,7 +23,6 @@ def create_flask_app() -> Flask:
 
     application.register_blueprint(auth)
     application.register_blueprint(document_api)
-    application.register_blueprint(comment_api)
     application.register_blueprint(invite_api)
     application.register_blueprint(message_api)
 

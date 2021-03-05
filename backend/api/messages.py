@@ -56,7 +56,7 @@ def select_message() -> Tuple[Any, int]:
         message.pop("user_to")
         message["_id"] = str(message["_id"])
         message["user_from"] = cast(
-            Dict, mongo.find_user_by_id(message["user_from"])
+            Dict, mongo.find_user_by_id(str(message["user_from"]))
         ).get("username")
 
     return jsonify(messages), 200

@@ -35,8 +35,11 @@ class MongoDBHandler:
     def find_user_by_name(self, nickname: str) -> Optional[Dict]:
         return self.db.users.find_one({"username": nickname})
 
-    def find_user_by_id(self, user_identifier: ObjectId) -> Optional[Dict]:
-        return self.db.users.find_one({"_id": user_identifier})
+    def find_user_by_id(self, user_identifier: str) -> Optional[Dict]:
+        if not ObjectId.is_valid(user_identifier):
+            return None
+
+        return self.db.users.find_one({"_id": ObjectId(user_identifier)})
 
     def user_exist(self, username: str, company: str) -> bool:
         return (
@@ -48,7 +51,7 @@ class MongoDBHandler:
 
     def update_user_role(self, user_id: str, new_role: str) -> None:
         if role_validation(new_role) and ObjectId.is_valid(user_id):
-            user: Dict = cast(Dict, self.find_user_by_id(ObjectId(user_id)))
+            user: Dict = cast(Dict, self.find_user_by_id(user_id))
             company = user["company"]
 
             if self.is_company_user_limit(company, new_role):
@@ -59,7 +62,7 @@ class MongoDBHandler:
                 )
 
     def create_document(self, document_name: str, creator: str) -> Optional[Dict]:
-        user = self.find_user_by_id(ObjectId(creator))
+        user = self.find_user_by_id(creator)
 
         if not self.document_exist(document_name) and user is not None:
             return self.db.documents.insert_one(
@@ -87,7 +90,7 @@ class MongoDBHandler:
         lawyer_approve, economist_approve = False, False
 
         for approved_by in document["approved"]:
-            user = self.find_user_by_id(ObjectId(approved_by))
+            user = self.find_user_by_id(approved_by)
 
             if user is not None and user["company"] == company_name:
                 if user["role"] == Role.LAWYER:
@@ -101,7 +104,7 @@ class MongoDBHandler:
         return False
 
     def delete_document(self, document_id: str, user_id: str) -> bool:
-        user: Dict = cast(Dict, self.find_user_by_id(ObjectId(user_id)))
+        user: Dict = cast(Dict, self.find_user_by_id(user_id))
         document: Dict = cast(Dict, self.find_document(document_id))
 
         if user["username"] == document["creator"]:
@@ -145,10 +148,16 @@ class MongoDBHandler:
                 ]
             )
 
+        for document in documents:
+            if document:
+                document["_id"] = str(document["_id"])
+            else:
+                documents.remove(document)
+
         return documents
 
     def select_company_documents(self, company: str) -> List:
-        return list(self.db.documents.find({"company": company}))
+        return list(self.db.documents.find({"company": company}, {"content": 0}))
 
     def select_company_users(self, company: str) -> List:
         return list(self.db.users.find({"company": company}))
@@ -156,7 +165,7 @@ class MongoDBHandler:
     def leave_comment(
         self, document_id: str, author: str, comment: str, commented_text: str
     ) -> Optional[Dict]:
-        user: Dict = cast(Dict, self.find_user_by_id(ObjectId(author)))
+        user: Dict = cast(Dict, self.find_user_by_id(author))
 
         return self.db.comments.insert_one(
             {
@@ -198,7 +207,8 @@ class MongoDBHandler:
         invite = {"user": user_id, "invite_document": document_id}
         self.db.invites.update_one(invite, {"$set": invite}, upsert=True)
 
-    def accept_invite(self, document_id: str, user_id: ObjectId) -> None:
+    def accept_invite(self, document_id: str, user_id: str) -> None:
+        user_id = ObjectId(user_id)
         permission = {"document": document_id, "user": user_id}
         self.db.permissions.update_one(permission, {"$set": permission}, upsert=True)
 
@@ -211,19 +221,21 @@ class MongoDBHandler:
 
         if len(permissions_list) != 0:
             users = [
-                self.find_user_by_id(permission["_id"])
+                self.find_user_by_id(str(permission["_id"]))
                 for permission in permissions_list
             ]
 
         return users
 
-    def check_user_permissions(self, user_id: ObjectId, document_id: str) -> bool:
+    def check_user_permissions(self, user_id: str, document_id: str) -> bool:
         user: Dict = cast(Dict, self.find_user_by_id(user_id))
         document: Dict = cast(Dict, self.find_document(document_id))
+        user_id = ObjectId(user_id)
         have_permissions = False
 
         if (
-            document["company"] == user["company"]
+            document
+            and document["company"] == user["company"]
             or self.db.permissions.find_one({"user": user_id, "document": document_id})
             is not None
         ):
@@ -234,7 +246,7 @@ class MongoDBHandler:
     def create_message(
         self, user_from: ObjectId, user_to: ObjectId, message: str
     ) -> None:
-        user = self.find_user_by_id(user_to)
+        user = self.find_user_by_id(str(user_to))
 
         if user:
             new_message = {

@@ -48,7 +48,7 @@ def create_invite() -> Tuple[Any, int]:
 
     if (
         document["company"]
-        != cast(Dict, mongo.find_user_by_id(ObjectId(user_identifier)))["company"]
+        != cast(Dict, mongo.find_user_by_id(user_identifier))["company"]
     ):
         return jsonify({"message": "You should have permissions for this action!"}), 403
 
@@ -66,7 +66,7 @@ def accept_invite(invite_id: str) -> Tuple[Any, int]:
 
     if request.method == "POST":
         body = request.get_json()
-        user_id = ObjectId(get_jwt_identity())
+        user_id = get_jwt_identity()
 
         if body is None:
             return jsonify(), 400
