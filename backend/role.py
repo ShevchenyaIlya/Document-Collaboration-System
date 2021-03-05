@@ -1,11 +1,16 @@
+from enum import Enum
 from typing import List
 
 
-class Role:
+class Role(Enum):
     LAWYER = "Lawyer"
     ECONOMIST = "Economist"
     GENERAL_DIRECTOR = "General director"
 
-    @classmethod
-    def get_roles(cls) -> List[str]:
-        return [cls.LAWYER, cls.ECONOMIST, cls.GENERAL_DIRECTOR]
+
+def get_roles() -> List[str]:
+    return [Role.LAWYER.value, Role.ECONOMIST.value, Role.GENERAL_DIRECTOR.value]
+
+
+def role_validation(role_name: str) -> bool:
+    return role_name in get_roles()

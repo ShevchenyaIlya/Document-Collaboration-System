@@ -1,4 +1,7 @@
-class Status:
+from enum import Enum
+
+
+class Status(Enum):
     CREATED = "Created"
     AGREEMENT = "Agreement"
     AGREED = "Agreed"
