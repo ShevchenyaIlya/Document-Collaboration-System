@@ -5,8 +5,7 @@ from bson.objectid import ObjectId
 from pymongo import MongoClient
 
 from .document_status import Status
-from .role import Role
-from .validators import role_validation
+from .role import Role, role_validation
 
 
 class MongoDBHandler:
@@ -17,10 +16,8 @@ class MongoDBHandler:
     def create_user(
         self, username: str, user_role: str, company: str
     ) -> Optional[ObjectId]:
-        if (
-            role_validation(user_role)
-            and not self.user_exist(username, company)
-            and self.is_company_user_limit(company, user_role)
+        if not self.user_exist(username, company) and self.is_company_user_limit(
+            company, user_role
         ):
             return self.db.users.insert_one(
                 {
@@ -50,16 +47,18 @@ class MongoDBHandler:
         )
 
     def update_user_role(self, user_id: str, new_role: str) -> None:
-        if role_validation(new_role) and ObjectId.is_valid(user_id):
-            user: Dict = cast(Dict, self.find_user_by_id(user_id))
-            company = user["company"]
+        if not ObjectId.is_valid(user_id):
+            return
 
-            if self.is_company_user_limit(company, new_role):
-                self.db.users.update_one(
-                    {"_id": ObjectId(user_id)},
-                    {"$set": {"role": new_role}},
-                    upsert=False,
-                )
+        user: Dict = cast(Dict, self.find_user_by_id(user_id))
+        company = user["company"]
+
+        if self.is_company_user_limit(company, new_role):
+            self.db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {"role": new_role}},
+                upsert=False,
+            )
 
     def create_document(self, document_name: str, creator: str) -> Optional[Dict]:
         user = self.find_user_by_id(creator)
@@ -69,7 +68,7 @@ class MongoDBHandler:
                 {
                     "document_name": document_name,
                     "creation_date": datetime.now(),
-                    "status": Status.CREATED,
+                    "status": Status.CREATED.value,
                     "creator": user["username"],
                     "company": user["company"],
                     "signed": [],
@@ -89,13 +88,13 @@ class MongoDBHandler:
         document: Dict = cast(Dict, self.find_document(document_id))
         lawyer_approve, economist_approve = False, False
 
-        for approved_by in document["approved"]:
-            user = self.find_user_by_id(approved_by)
+        for approver in document["approved"]:
+            user = self.find_user_by_id(approver)
 
-            if user is not None and user["company"] == company_name:
-                if user["role"] == Role.LAWYER:
+            if user and user["company"] == company_name:
+                if user["role"] == Role.LAWYER.value:
                     lawyer_approve = True
-                elif user["role"] == Role.ECONOMIST:
+                elif user["role"] == Role.ECONOMIST.value:
                     economist_approve = True
 
                 if lawyer_approve and economist_approve:
@@ -120,10 +119,10 @@ class MongoDBHandler:
         )
 
     def is_company_user_limit(self, company: str, role: str) -> bool:
-        user_limit = {
-            Role.LAWYER: 3,
-            Role.ECONOMIST: 3,
-            Role.GENERAL_DIRECTOR: 1,
+        user_limit: Dict[str, int] = {
+            Role.LAWYER.value: 3,
+            Role.ECONOMIST.value: 3,
+            Role.GENERAL_DIRECTOR.value: 1,
         }
         return (
             self.db.users.count_documents({"company": company, "role": role})
@@ -162,7 +161,7 @@ class MongoDBHandler:
     def select_company_users(self, company: str) -> List:
         return list(self.db.users.find({"company": company}))
 
-    def leave_comment(
+    def create_comment(
         self, document_id: str, author: str, comment: str, commented_text: str
     ) -> Optional[Dict]:
         user: Dict = cast(Dict, self.find_user_by_id(author))
@@ -194,8 +193,11 @@ class MongoDBHandler:
     def get_document_comments(self, document_id: str) -> List:
         return list(self.db.comments.find({"document_id": document_id}))
 
-    def select_invite(self, user_id: ObjectId) -> Optional[Dict]:
-        return self.db.invites.find_one({"user": user_id})
+    def select_invite(self, user_id: str) -> Optional[Dict]:
+        if not ObjectId.is_valid(user_id):
+            return None
+
+        return self.db.invites.find_one({"user": ObjectId(user_id)})
 
     def remove_invite(self, user_id: ObjectId, document_id: ObjectId) -> None:
         self.db.invites.delete_one({"user": user_id, "invite_document": document_id})
@@ -203,7 +205,7 @@ class MongoDBHandler:
     def remove_invite_by_id(self, invite_id: ObjectId) -> None:
         self.db.invites.delete_one({"_id": invite_id})
 
-    def add_invite(self, user_id: ObjectId, document_id: ObjectId) -> None:
+    def create_invite(self, user_id: ObjectId, document_id: ObjectId) -> None:
         invite = {"user": user_id, "invite_document": document_id}
         self.db.invites.update_one(invite, {"$set": invite}, upsert=True)
 
@@ -257,5 +259,32 @@ class MongoDBHandler:
             }
             self.db.messages.update_one(new_message, {"$set": new_message}, upsert=True)
 
-    def select_messages(self, user_id: ObjectId) -> List:
-        return list(self.db.messages.find({"user_to": user_id}))
+    def select_messages(self, user_id: str) -> List:
+        if not ObjectId.is_valid(user_id):
+            return []
+
+        messages = list(self.db.messages.find({"user_to": ObjectId(user_id)}))
+
+        for message in messages:
+            message.pop("user_to")
+            message["_id"] = str(message["_id"])
+            message["user_from"] = cast(
+                Dict, self.find_user_by_id(str(message["user_from"]))
+            ).get("username")
+
+        return messages
+
+    def get_users_with_permissions_to_document(
+        self, document_id: str, company: str, user_id: str
+    ) -> List:
+        if not ObjectId.is_valid(document_id):
+            return []
+
+        users = self.select_company_users(company)
+        users.extend(self.get_users_with_permissions(ObjectId(document_id)))
+        users = list(filter(lambda x: x["_id"] != ObjectId(user_id), users))
+
+        for user in users:
+            user["_id"] = str(user["_id"])
+
+        return users
