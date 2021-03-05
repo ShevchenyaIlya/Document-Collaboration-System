@@ -52,7 +52,7 @@ export default function CustomMenu({ document, readOnly, setMode }) {
 
   const handleDocumentDeleting = () => {
     api.deleteDocument(document).then((response) => {
-      if (typeof response.message !== "undefined") {
+      if (response !== null && typeof response.message !== "undefined") {
         alertContent.handler({
           alertOpen: true,
           alertMessage: response.message,

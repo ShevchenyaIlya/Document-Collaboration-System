@@ -195,7 +195,14 @@ class MongoDBHandler:
         return self.db.comments.count_documents({"_id": comment_id}, limit=1) != 0
 
     def get_document_comments(self, document_id: str) -> List:
-        return list(self.db.comments.find({"document_id": document_id}))
+        if not ObjectId.is_valid(document_id):
+            return []
+
+        comments = list(self.db.comments.find({"document_id": document_id}))
+        for comment in comments:
+            comment["_id"] = str(comment["_id"])
+
+        return comments
 
     def select_invite(self, user_id: str) -> Optional[Dict]:
         if not ObjectId.is_valid(user_id):
