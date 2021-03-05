@@ -10,7 +10,7 @@ class APIService {
   };
 
   postMessage = async (body) => {
-    return await send_request("POST", "message", body);
+    return await send_request("POST", "messages", body);
   };
 
   getUsers = async (document) => {

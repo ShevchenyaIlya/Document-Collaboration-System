@@ -53,7 +53,7 @@ export default function SendMessageDialog({
   const handleSend = () => {
     if (messageMode) {
       if (message !== "" && choice !== "") {
-        sendMessage(choice, message);
+        sendMessage([choice], message);
       }
     } else {
       let usersId = [];
