@@ -22,7 +22,7 @@ class APIService {
   };
 
   changeDocumentState = async (operation, document) => {
-    return await send_request("POST", operation + "/" + document);
+    return await send_request("POST", "documents/" + document + "/" + operation);
   };
 
   deleteDocument = async (document) => {

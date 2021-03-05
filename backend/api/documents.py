@@ -99,7 +99,7 @@ def get_documents() -> Tuple[Any, int]:
     return jsonify(documents), 200
 
 
-@document_api.route('/approve/<document_id>', methods=["POST"])
+@document_api.route('/documents/<document_id>/approve', methods=["POST"])
 @jwt_required()
 def approve_document(document_id: str) -> Tuple[Any, int]:
     user_identifier = get_jwt_identity()
@@ -122,7 +122,7 @@ def approve_document(document_id: str) -> Tuple[Any, int]:
     return jsonify({}), 200
 
 
-@document_api.route('/sign/<document_id>', methods=["POST"])
+@document_api.route('/documents/<document_id>/sign', methods=["POST"])
 @jwt_required()
 def sign_document(document_id: str) -> Tuple[Any, int]:
     user_identifier = get_jwt_identity()
@@ -132,7 +132,6 @@ def sign_document(document_id: str) -> Tuple[Any, int]:
     if user["role"] != Role.GENERAL_DIRECTOR.value:
         return jsonify({"message": "Signing validation failed!"}), 409
 
-    print(document)
     if document["status"] not in [Status.AGREED.value, Status.SIGNING.value]:
         return jsonify({"message": "You can't execute such command!"}), 409
 
@@ -152,7 +151,7 @@ def sign_document(document_id: str) -> Tuple[Any, int]:
     return jsonify({}), 200
 
 
-@document_api.route('/archive/<document_id>', methods=["POST"])
+@document_api.route('/documents/<document_id>/archive', methods=["POST"])
 @jwt_required()
 def archive_document(document_id: str) -> Tuple[Any, int]:
     user_identifier = get_jwt_identity()
