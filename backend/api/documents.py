@@ -36,7 +36,7 @@ def update_document_content(document_id: str) -> Tuple[Any, int]:
     if request.method == "GET":
         response = get_document(document_id, user_id)
     elif request.method == "PUT":
-        response = update_document(document_id, request.get_json())
+        response = update_document(document_id, user_id, request.get_json())
     else:
         response = delete_document(document_id, user_id)
 
@@ -60,9 +60,17 @@ def get_document(document_id: str, user_identifier: str) -> Tuple[Any, int]:
     return jsonify({"message": f"Document with {document_id} not found"}), 404
 
 
-def update_document(document_id: str, content: Any) -> Tuple[Any, int]:
+def update_document(
+    document_id: str, user_identifier: str, content: Any
+) -> Tuple[Any, int]:
     if not content:
         return jsonify({{"message": "Empty body"}}), 400
+
+    user = cast(Dict, mongo.find_user_by_id(user_identifier))
+    document = mongo.find_document(document_id)
+
+    if not document or user["company"] != document["company"]:
+        return jsonify({{"message": "You have no permission for that"}}), 403
 
     mongo.update_document(document_id, "content", content)
     return jsonify(), 204
@@ -101,7 +109,7 @@ def approve_document(document_id: str) -> Tuple[Any, int]:
     if not document:
         return jsonify({"message": f"Document with {document_id} not found"}), 404
 
-    if user["role"] not in [Role.LAWYER, Role.ECONOMIST]:
+    if user["role"] not in [Role.LAWYER.value, Role.ECONOMIST.value]:
         return jsonify({"message": "Invalid role for approving document!"}), 409
 
     if user_identifier in document["approved"]:
@@ -109,9 +117,9 @@ def approve_document(document_id: str) -> Tuple[Any, int]:
 
     document["approved"].append(user_identifier)
     mongo.update_document(document_id, "approved", document["approved"])
-    mongo.update_document(document_id, "status", Status.AGREED)
+    mongo.update_document(document_id, "status", Status.AGREED.value)
 
-    return jsonify({}), 204
+    return jsonify({}), 200
 
 
 @document_api.route('/sign/<document_id>', methods=["POST"])
@@ -121,10 +129,11 @@ def sign_document(document_id: str) -> Tuple[Any, int]:
     document = cast(Dict, mongo.find_document(document_id))
     user = cast(Dict, mongo.find_user_by_id(user_identifier))
 
-    if user["role"] != Role.GENERAL_DIRECTOR:
+    if user["role"] != Role.GENERAL_DIRECTOR.value:
         return jsonify({"message": "Signing validation failed!"}), 409
 
-    if document["status"] not in [Status.AGREED, Status.SIGNING]:
+    print(document)
+    if document["status"] not in [Status.AGREED.value, Status.SIGNING.value]:
         return jsonify({"message": "You can't execute such command!"}), 409
 
     if not mongo.is_approved_by_company(document_id, user["company"]):
@@ -138,9 +147,9 @@ def sign_document(document_id: str) -> Tuple[Any, int]:
 
     document["signed"].append(user_identifier)
     mongo.update_document(document_id, "signed", document["signed"])
-    mongo.update_document(document_id, "status", Status.SIGNING)
+    mongo.update_document(document_id, "status", Status.SIGNING.value)
 
-    return jsonify({}), 204
+    return jsonify({}), 200
 
 
 @document_api.route('/archive/<document_id>', methods=["POST"])
@@ -158,10 +167,10 @@ def archive_document(document_id: str) -> Tuple[Any, int]:
             403,
         )
 
-    if document["status"] != Status.SIGNING or len(document["signed"]) < 2:
+    if document["status"] != Status.SIGNING.value or len(document["signed"]) < 2:
         return jsonify({"message": "Sign document before archive!"}), 403
 
-    mongo.update_document(document_id, "status", Status.ARCHIVE)
+    mongo.update_document(document_id, "status", Status.ARCHIVE.value)
 
     return jsonify({}), 200
 
@@ -170,7 +179,7 @@ def archive_document(document_id: str) -> Tuple[Any, int]:
 @jwt_required()
 def leave_comment(document_id: str) -> Tuple[Any, int]:
     content = request.get_json()
-    comment_id = mongo.leave_comment(
+    comment_id = mongo.create_comment(
         document_id, get_jwt_identity(), content["comment"], content["target"]
     )
 
