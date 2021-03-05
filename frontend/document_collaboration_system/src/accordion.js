@@ -51,7 +51,7 @@ export default function ControlledAccordions({ setDocument }) {
       });
       history.push("/login");
     } else {
-      api.postDocument(documentIdentifier).then((data) => {
+      api.postDocument(JSON.stringify({document_name: documentIdentifier})).then((data) => {
         if (data !== null) {
           const { message } = data;
 

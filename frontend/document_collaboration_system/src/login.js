@@ -17,7 +17,7 @@ function Login() {
   const handler = (event) => {
     event.preventDefault();
 
-    api.userLogin(textField).then((response_data) => {
+    api.userLogin(JSON.stringify({nickname: textField})).then((response_data) => {
       if (response_data === null) {
         alertContent.handler({
           alertOpen: true,

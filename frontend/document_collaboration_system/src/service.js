@@ -6,7 +6,7 @@ class APIService {
   };
 
   postComment = async (document, body) => {
-    return await send_request("POST", "comment/" + document, body);
+    return await send_request("POST", "documents/" + document + "/comments", body);
   };
 
   postMessage = async (body) => {
@@ -26,7 +26,7 @@ class APIService {
   };
 
   deleteDocument = async (document) => {
-    return await send_request("DELETE", "document/" + document);
+    return await send_request("DELETE", "documents/" + document);
   };
 
   getDocuments = async () => {
@@ -34,15 +34,15 @@ class APIService {
   };
 
   getDocument = async (documentId) => {
-    return await send_request("GET", "document/" + documentId);
+    return await send_request("GET", "documents/" + documentId);
   };
 
   updateDocument = async (documentId, body) => {
-    return await send_request("PUT", "document/" + documentId, body);
+    return await send_request("PUT", "documents/" + documentId, body);
   };
 
   postDocument = async (documentId) => {
-    return await send_request("POST", "document", documentId);
+    return await send_request("POST", "documents", documentId);
   };
 
   getInvite = async () => {
@@ -61,16 +61,16 @@ class APIService {
     return await send_request("POST", "invite/" + inviteId, body);
   };
 
-  updateComment = async (commentId, body) => {
-    return await send_request("PUT", "comment/" + commentId, body);
+  updateComment = async (documentId, commentId, body) => {
+    return await send_request("PUT", "documents/" + documentId + "/comments/" + commentId, body);
   };
 
-  deleteComment = async (commentId) => {
-    return await send_request("DELETE", "comment/" + commentId);
+  deleteComment = async (documentId, commentId) => {
+    return await send_request("DELETE", "documents/" + documentId + "/comments/" + commentId);
   };
 
   getComments = async (documentId) => {
-    return await send_request("GET", "comments/" + documentId);
+    return await send_request("GET", "documents/" + documentId + "/comments");
   };
 }
 

@@ -42,6 +42,7 @@ export function CommentButton({ document }) {
         setOpen={setOpenCommentEditor}
         comments={comments}
         setComments={setComments}
+        document={document}
       />
     </div>
   );

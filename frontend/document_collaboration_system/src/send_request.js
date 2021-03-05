@@ -37,7 +37,7 @@ async function send_request(method, endpoint, body = null) {
       async: true,
     });
 
-    if ([200, 201, 403].includes(response_data.status)) {
+    if ([200, 201, 403, 409].includes(response_data.status)) {
       return await response_data.json();
     } else {
       return null;

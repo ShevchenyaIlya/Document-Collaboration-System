@@ -14,6 +14,7 @@ export default function EditCommentDialog({
   setOpen,
   comments,
   setComments,
+  document
 }) {
   const [newCommentText, commentChange] = useState("");
   const onChangeComment = useCallback(
@@ -24,6 +25,7 @@ export default function EditCommentDialog({
   const updateCommentHandler = () => {
     api
       .updateComment(
+        document,
         openedComment.comment._id,
         JSON.stringify({ comment: newCommentText })
       )
@@ -37,7 +39,7 @@ export default function EditCommentDialog({
   };
 
   const deleteCommentHandler = () => {
-    api.deleteComment(openedComment.comment._id).then();
+    api.deleteComment(document, openedComment.comment._id).then();
     _.remove(comments, function (element) {
       return element._id === openedComment.comment._id;
     });
