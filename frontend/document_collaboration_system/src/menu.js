@@ -1,16 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import "./css/base.css";
 import { useHistory } from "react-router-dom";
-import { AppContext } from "./index";
+import { AppContext } from "./";
 import InviteUserDialog from "./inviteUserDialog";
-import { api } from "./service";
+import api from "./service";
 
 export default function CustomMenu({ document, readOnly, setMode }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [inviteDialog, openDialog] = React.useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [inviteDialog, openDialog] = useState(false);
   const history = useHistory();
   const { alertContent } = useContext(AppContext);
 

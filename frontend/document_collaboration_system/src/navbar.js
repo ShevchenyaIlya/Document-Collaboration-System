@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import "./css/base.css";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { AppContext } from "./index";
+import { AppContext } from "./";
 
 function Navbar() {
   const history = useHistory();

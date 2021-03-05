@@ -74,5 +74,4 @@ class APIService {
   };
 }
 
-const api = new APIService();
-export { api };
+export default new APIService();

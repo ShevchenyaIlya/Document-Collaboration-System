@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import { api } from "./service";
+import api from "./service";
 
 export default function InviteSnackbar({ notification }) {
   const handleClose = (event, reason) => {

@@ -1,5 +1,5 @@
-import React, { useCallback, useContext } from "react";
-import { AppContext } from "./index";
+import React, { useCallback, useContext, useState } from "react";
+import { AppContext } from "./";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -11,7 +11,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { TextField } from "@material-ui/core";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import { api } from "./service";
+import api from "./service";
 
 export default function SendMessageDialog({
   openDialog,
@@ -19,14 +19,13 @@ export default function SendMessageDialog({
   messageMode,
   users,
 }) {
-  const [message, setMessage] = React.useState("");
+  const [choice, setChoice] = useState("");
+  const [message, setMessage] = useState("");
+  const { alertContent } = useContext(AppContext);
   const onChangeMessage = useCallback(
     (event) => setMessage(event.target.value),
     []
   );
-
-  const [choice, setChoice] = React.useState("");
-  const { alertContent } = useContext(AppContext);
 
   const handleChange = (event) => {
     setChoice(event.target.value);

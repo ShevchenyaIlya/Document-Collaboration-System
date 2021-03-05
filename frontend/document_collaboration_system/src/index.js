@@ -15,7 +15,7 @@ import {
 } from "react-router-dom";
 import CustomizedSnackbars from "./customAlert";
 import InviteSnackbar from "./inviteAlert";
-import { api } from "./service";
+import api from "./service";
 import Messages from "./chat";
 import { Error404 } from "./error";
 import Header from "./header";
@@ -62,8 +62,10 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-    this.updateState("session_token")(sessionStorage.getItem("token"));
-    this.updateState("username")(sessionStorage.getItem("username"));
+    this.setState({
+      session_token: sessionStorage.getItem("token"),
+      username: sessionStorage.getItem("username")
+    });
     this.timer = setInterval(() => this.loadNotification(), 10000);
   }
 

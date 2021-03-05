@@ -2,8 +2,8 @@ import { Avatar, Button, Paper, TextField } from "@material-ui/core";
 import React, { useCallback, useContext, useState } from "react";
 import "./css/login.css";
 import { Link, useHistory } from "react-router-dom";
-import { AppContext } from "./index";
-import { api } from "./service";
+import { AppContext } from "./";
+import api from "./service";
 
 function Login() {
   const [textField, setText] = useState("");

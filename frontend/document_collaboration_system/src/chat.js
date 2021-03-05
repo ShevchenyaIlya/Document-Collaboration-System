@@ -5,8 +5,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MessageIcon from "@material-ui/icons/Message";
 import ListItemText from "@material-ui/core/ListItemText";
 import List from "@material-ui/core/List";
-import { api } from "./service";
-import { AppContext } from "./index";
+import api from "./service";
+import { AppContext } from "./";
 import _ from "lodash";
 import { useHistory } from "react-router-dom";
 

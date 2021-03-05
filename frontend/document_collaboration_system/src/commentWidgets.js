@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import EditCommentDialog from "./editCommentsDialog";
 import CommentsDialog from "./commentsDialog";
 import "./css/base.css";
-import { api } from "./service";
+import api from "./service";
 
 export function CommentButton({ document }) {
   const [openCommentsList, setOpenCommentsList] = useState(false);

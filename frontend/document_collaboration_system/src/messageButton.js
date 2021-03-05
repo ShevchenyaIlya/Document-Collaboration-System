@@ -3,13 +3,13 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import SendMessageDialog from "./messageDialog";
-import { api } from "./service";
+import api from "./service";
 
 export function MessageButton({ document }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDialog, setOpen] = useState(false);
   const [personalMode, setMessageMode] = useState(true);
-  const [users, setUsers] = React.useState([]);
+  const [users, setUsers] = useState([]);
 
   const personalMessage = (value) => () => {
     api.getUsers(document).then((response) => {

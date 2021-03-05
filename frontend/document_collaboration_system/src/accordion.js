@@ -6,9 +6,9 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Button, TextField } from "@material-ui/core";
-import { api } from "./service";
+import api from "./service";
 import { useHistory } from "react-router-dom";
-import { AppContext } from "./index";
+import { AppContext } from "./";
 import "./css/base.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +30,7 @@ export default function ControlledAccordions({ setDocument }) {
   const classes = useStyles();
   const history = useHistory();
   const { alertContent } = useContext(AppContext);
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [documentIdentifier, setDocumentName] = useState("");
   const onChangeDocumentName = useCallback(
     (event) => setDocumentName(event.target.value),
