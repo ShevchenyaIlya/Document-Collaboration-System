@@ -1,6 +1,5 @@
 from typing import Any, Dict, List, Tuple, cast
 
-from bson import ObjectId
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
@@ -28,14 +27,14 @@ def get_users_with_permissions(document_id: str) -> Tuple[Any, int]:
 @message_api.route('/messages', methods=["POST"])
 @jwt_required()
 def create_message() -> Tuple[Any, int]:
-    user_id = ObjectId(get_jwt_identity())
+    user_id = get_jwt_identity()
     body = request.get_json()
 
     if not body.get("to_users", False) or not body.get("message", False):
         return jsonify({"message": "Invalid body content"}), 403
 
     for user in body["to_users"]:
-        mongo.create_message(user_id, ObjectId(user), body["message"])
+        mongo.create_message(user_id, user, body["message"])
 
     return jsonify(), 201
 

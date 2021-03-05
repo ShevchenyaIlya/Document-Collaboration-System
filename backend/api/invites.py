@@ -1,6 +1,5 @@
 from typing import Any, Dict, Optional, Tuple, cast
 
-from bson import ObjectId
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
@@ -42,7 +41,7 @@ def get_invites(user_id: str) -> Tuple[Any, int]:
 
 
 def create_invite(user_identifier: str, body: Optional[Dict]) -> Tuple[Any, int]:
-    if body is None or not ObjectId.is_valid(body["document"]):
+    if not body:
         return jsonify({}), 400
 
     user = mongo.find_user_by_name(body["username"])
@@ -57,18 +56,15 @@ def create_invite(user_identifier: str, body: Optional[Dict]) -> Tuple[Any, int]
     ):
         return jsonify({"message": "You should have permissions for this action!"}), 403
 
-    mongo.create_invite(user["_id"], ObjectId(body["document"]))
+    if not mongo.create_invite(user["_id"], body["document"]):
+        return jsonify(), 404
+
     return jsonify(), 201
 
 
 @invite_api.route('/invite/<invite_id>', methods=["DELETE", "POST"])
 @jwt_required()
 def accept_invite(invite_id: str) -> Tuple[Any, int]:
-    if not ObjectId.is_valid(invite_id):
-        return jsonify(), 400
-
-    invite_id = ObjectId(invite_id)
-
     if request.method == "POST":
         body = request.get_json()
         user_id = get_jwt_identity()
@@ -79,6 +75,7 @@ def accept_invite(invite_id: str) -> Tuple[Any, int]:
         if not mongo.check_user_permissions(user_id, body["document_id"]):
             mongo.accept_invite(body["document_id"], user_id)
 
-    mongo.remove_invite_by_id(invite_id)
+    if not mongo.remove_invite_by_id(invite_id):
+        return jsonify(), 400
 
     return jsonify(), 200

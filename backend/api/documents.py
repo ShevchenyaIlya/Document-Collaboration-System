@@ -1,6 +1,5 @@
 from typing import Any, Dict, Tuple, cast
 
-from bson import ObjectId
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
@@ -193,16 +192,11 @@ def leave_comment(document_id: str) -> Tuple[Any, int]:
 )
 @jwt_required()
 def modify_comment(document_id: str, comment_id: str) -> Tuple[Any, int]:
-    if ObjectId.is_valid(comment_id):
-        comment_id = ObjectId(comment_id)
-
-        if request.method == "DELETE":
-            mongo.delete_comment(comment_id)
-        elif request.method == "PUT":
-            body = request.get_json()
-            mongo.update_comment(comment_id, body["comment"])
-    else:
-        return jsonify(), 422
+    if request.method == "DELETE":
+        mongo.delete_comment(comment_id)
+    elif request.method == "PUT":
+        body = request.get_json()
+        mongo.update_comment(comment_id, body["comment"])
 
     return jsonify({}), 200
 

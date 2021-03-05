@@ -148,11 +148,10 @@ class MongoDBHandler:
             )
 
         for document in documents:
-            if document:
+            if document is not None:
                 document["_id"] = str(document["_id"])
-            else:
-                documents.remove(document)
 
+        documents = list(filter(None, documents))
         return documents
 
     def select_company_documents(self, company: str) -> List:
@@ -176,16 +175,21 @@ class MongoDBHandler:
             }
         ).inserted_id
 
-    def update_comment(self, comment_id: ObjectId, comment: Optional[Dict]) -> None:
-        if self.comment_exists(comment_id) and comment is not None:
+    def update_comment(self, comment_id: str, comment: Optional[Dict]) -> None:
+        if (
+            ObjectId.is_valid(comment_id)
+            and self.comment_exists(ObjectId(comment_id))
+            and comment
+        ):
             self.db.comments.update_one(
                 {"_id": ObjectId(comment_id)},
                 {"$set": {"comment": comment}},
                 upsert=False,
             )
 
-    def delete_comment(self, comment_id: ObjectId) -> None:
-        self.db.comments.delete_one({"_id": comment_id})
+    def delete_comment(self, comment_id: str) -> None:
+        if ObjectId.is_valid(comment_id):
+            self.db.comments.delete_one({"_id": ObjectId(comment_id)})
 
     def comment_exists(self, comment_id: ObjectId) -> bool:
         return self.db.comments.count_documents({"_id": comment_id}, limit=1) != 0
@@ -202,12 +206,20 @@ class MongoDBHandler:
     def remove_invite(self, user_id: ObjectId, document_id: ObjectId) -> None:
         self.db.invites.delete_one({"user": user_id, "invite_document": document_id})
 
-    def remove_invite_by_id(self, invite_id: ObjectId) -> None:
-        self.db.invites.delete_one({"_id": invite_id})
+    def remove_invite_by_id(self, invite_id: str) -> bool:
+        if not ObjectId.is_valid(invite_id):
+            return False
 
-    def create_invite(self, user_id: ObjectId, document_id: ObjectId) -> None:
-        invite = {"user": user_id, "invite_document": document_id}
+        self.db.invites.delete_one({"_id": ObjectId(invite_id)})
+        return True
+
+    def create_invite(self, user_id: ObjectId, document_id: str) -> bool:
+        if not ObjectId.is_valid(document_id):
+            return False
+
+        invite = {"user": user_id, "invite_document": ObjectId(document_id)}
         self.db.invites.update_one(invite, {"$set": invite}, upsert=True)
+        return True
 
     def accept_invite(self, document_id: str, user_id: str) -> None:
         user_id = ObjectId(user_id)
@@ -245,11 +257,11 @@ class MongoDBHandler:
 
         return have_permissions
 
-    def create_message(
-        self, user_from: ObjectId, user_to: ObjectId, message: str
-    ) -> None:
-        user = self.find_user_by_id(str(user_to))
+    def create_message(self, user_from: str, user_to: str, message: str) -> None:
+        if not ObjectId.is_valid(user_from) or not ObjectId.is_valid(user_to):
+            return
 
+        user = self.find_user_by_id(str(user_to))
         if user:
             new_message = {
                 "user_from": user_from,
