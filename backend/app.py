@@ -18,7 +18,7 @@ def create_flask_app() -> Flask:
     application.config["MAIL_SERVER"] = "smtp.gmail.com"
     application.config["MAIL_PORT"] = 465
     application.config["MAIL_USERNAME"] = "onlineproductstore95@gmail.com"
-    application.config["MAIL_PASSWORD"] = ""
+    application.config["MAIL_PASSWORD"] = "OnlineProductStore"
     application.config["MAIL_USE_TLS"] = False
     application.config["MAIL_USE_SSL"] = True
 

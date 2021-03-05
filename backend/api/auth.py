@@ -10,7 +10,12 @@ auth: Blueprint = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=["POST"])
 def login() -> Tuple[Any, int]:
-    nickname = request.data.decode("utf-8")
+    body = request.get_json()
+
+    if not body.get("nickname", False):
+        return jsonify(body), 400
+
+    nickname = body["nickname"]
     user = mongo.find_user_by_name(nickname)
 
     if user is None:
