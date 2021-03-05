@@ -1,9 +1,9 @@
-from typing import Any, Dict, Optional, Tuple, cast
+from typing import Any, Tuple
 
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
-from backend.database_handler_entity import mongo
+import backend.services.invites_service as service
 
 invite_api = Blueprint('invite_api', __name__)
 
@@ -14,68 +14,23 @@ def invite() -> Tuple[Any, int]:
     user_id = get_jwt_identity()
 
     if request.method == "GET":
-        response = get_invites(user_id)
+        body, status_code = service.get_invites(user_id)
     else:
         body = request.get_json()
-        response = create_invite(user_id, body)
+        body, status_code = service.create_invite(user_id, body)
 
-    return response
-
-
-def get_invites(user_id: str) -> Tuple[Any, int]:
-    if (user_invite := mongo.select_invite(user_id)) is None:
-        return jsonify({"message": "No invite"}), 404
-    else:
-        document_id = str(user_invite["invite_document"])
-        document = cast(Dict, mongo.find_document(document_id))
-        return (
-            jsonify(
-                {
-                    "document_name": document["document_name"],
-                    "document_id": str(document["_id"]),
-                    "invite_id": str(user_invite["_id"]),
-                }
-            ),
-            200,
-        )
+    return jsonify(body), status_code
 
 
-def create_invite(user_identifier: str, body: Optional[Dict]) -> Tuple[Any, int]:
-    if not body:
-        return jsonify({}), 400
-
-    user = mongo.find_user_by_name(body["username"])
-    if user is None or str(user["_id"]) == user_identifier:
-        return jsonify({"message": "Invalid identification data!"}), 403
-
-    document = cast(Dict, mongo.find_document(body["document"]))
-
-    if (
-        document["company"]
-        != cast(Dict, mongo.find_user_by_id(user_identifier))["company"]
-    ):
-        return jsonify({"message": "You should have permissions for this action!"}), 403
-
-    if not mongo.create_invite(user["_id"], body["document"]):
-        return jsonify(), 404
-
-    return jsonify(), 201
-
-
-@invite_api.route('/invite/<invite_id>', methods=["DELETE", "POST"])
+@invite_api.route('/invite/<invite_id>', methods=["POST", "DELETE"])
 @jwt_required()
 def accept_invite(invite_id: str) -> Tuple[Any, int]:
-    if request.method == "POST":
+    user_id = get_jwt_identity()
+
+    if request.method == "DELETE":
+        body, status_code = service.undo_invite(invite_id)
+    else:
         body = request.get_json()
-        user_id = get_jwt_identity()
+        body, status_code = service.accept_invite(body, user_id, invite_id)
 
-        if body is None:
-            return jsonify(), 400
-
-        if not mongo.check_user_permissions(user_id, body["document_id"]):
-            mongo.accept_invite(body["document_id"], user_id)
-
-    if not mongo.remove_invite_by_id(invite_id):
-        return jsonify(), 400
-
-    return jsonify(), 200
+    return jsonify(body), status_code

@@ -3,7 +3,7 @@ from typing import Any, Dict, Tuple, cast
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
-import backend.services.service as service
+import backend.services.documents_service as service
 from backend.database_handler_entity import mongo
 
 document_api = Blueprint('document_api', __name__)

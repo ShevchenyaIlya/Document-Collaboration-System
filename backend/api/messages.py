@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Tuple, cast
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
+import backend.services.messages_service as service
 from backend.database_handler_entity import mongo
 
 message_api = Blueprint('message_api', __name__)
@@ -12,16 +13,9 @@ message_api = Blueprint('message_api', __name__)
 @jwt_required()
 def get_users_with_permissions(document_id: str) -> Tuple[Any, int]:
     user_id = get_jwt_identity()
+    body, status_code = service.get_users_with_permissions(document_id, user_id)
 
-    document = mongo.find_document(document_id)
-    if document is None:
-        return jsonify({"message": "No such document"}), 404
-
-    users = mongo.get_users_with_permissions_to_document(
-        document["_id"], document["company"], user_id
-    )
-
-    return jsonify(users), 200
+    return jsonify(body), status_code
 
 
 @message_api.route('/messages', methods=["POST"])
@@ -29,14 +23,9 @@ def get_users_with_permissions(document_id: str) -> Tuple[Any, int]:
 def create_message() -> Tuple[Any, int]:
     user_id = get_jwt_identity()
     body = request.get_json()
+    body, status_code = service.create_message(body, user_id)
 
-    if not body.get("to_users", False) or not body.get("message", False):
-        return jsonify({"message": "Invalid body content"}), 403
-
-    for user in body["to_users"]:
-        mongo.create_message(user_id, user, body["message"])
-
-    return jsonify(), 201
+    return jsonify(body), status_code
 
 
 @message_api.route('/messages', methods=["GET"])
