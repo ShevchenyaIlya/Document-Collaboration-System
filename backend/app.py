@@ -5,7 +5,7 @@ from .api.auth import auth
 from .api.documents import document_api
 from .api.invites import invite_api
 from .api.messages import message_api
-from .api.send_email import mail
+from .services.send_email import mail
 
 
 def create_flask_app() -> Flask:

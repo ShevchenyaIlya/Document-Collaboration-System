@@ -1,6 +1,6 @@
 from typing import Any, Dict, Tuple
 
-from backend.database_handler_entity import mongo
+from backend.mongodb_handler import mongo
 
 
 def create_message(body: Dict, user_id: str) -> Tuple[Dict, int]:

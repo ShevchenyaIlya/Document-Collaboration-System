@@ -5,7 +5,7 @@ from bson.objectid import ObjectId
 from pymongo import MongoClient
 
 from .document_status import Status
-from .role import Role, role_validation
+from .role import Role
 
 
 class MongoDBHandler:
@@ -14,7 +14,7 @@ class MongoDBHandler:
         self.db = self.client.myDatabase
 
     def create_user(
-        self, username: str, user_role: str, company: str
+        self, username: str, user_role: str, company: str, email: str
     ) -> Optional[ObjectId]:
         if not self.user_exist(username, company) and self.is_company_user_limit(
             company, user_role
@@ -22,6 +22,7 @@ class MongoDBHandler:
             return self.db.users.insert_one(
                 {
                     "username": username,
+                    "email": email,
                     "role": user_role,
                     "company": company,
                 }
@@ -307,3 +308,6 @@ class MongoDBHandler:
             user["_id"] = str(user["_id"])
 
         return users
+
+
+mongo = MongoDBHandler()

@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 import backend.services.messages_service as service
-from backend.database_handler_entity import mongo
+from backend.mongodb_handler import mongo
 
 message_api = Blueprint('message_api', __name__)
 

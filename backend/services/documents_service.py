@@ -1,8 +1,10 @@
 from typing import Any, Dict, Tuple, cast
 
-from backend.database_handler_entity import mongo
 from backend.document_status import Status
+from backend.mongodb_handler import mongo
 from backend.role import Role
+
+from .send_email import send_email
 
 
 def create_document(body: Dict, user_id: str) -> Tuple[Any, int]:
@@ -52,10 +54,8 @@ def update_document(
         return {"message": "Empty body"}, 400
 
     if content.get("operation", False):
-        print("Operation")
         return update_document_state(document_id, user_identifier, content["operation"])
 
-    print("Content")
     return update_document_content(document_id, user_identifier, content)
 
 
@@ -105,6 +105,7 @@ def approve_document(document_id: str, user_id: str) -> Tuple[Dict, int]:
     mongo.update_document(document_id, "approved", document["approved"])
     mongo.update_document(document_id, "status", Status.AGREED.value)
 
+    send_email("approve", document_id, user_id)
     return {}, 200
 
 
@@ -130,6 +131,7 @@ def sign_document(document_id: str, user_id: str) -> Tuple[Dict, int]:
     document["signed"].append(user_id)
     mongo.update_document(document_id, "signed", document["signed"])
     mongo.update_document(document_id, "status", Status.SIGNING.value)
+    send_email("sign", document_id, user_id)
 
     return {}, 200
 
@@ -148,5 +150,6 @@ def archive_document(document_id: str, user_id: str) -> Tuple[Dict, int]:
         return {"message": "Sign document before archive!"}, 403
 
     mongo.update_document(document_id, "status", Status.ARCHIVE.value)
+    send_email("archive", document_id, user_id)
 
     return {}, 200

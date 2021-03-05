@@ -3,7 +3,7 @@ from typing import Any, Tuple
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 
-from backend.database_handler_entity import mongo
+from backend.mongodb_handler import mongo
 from backend.role import role_validation
 
 auth: Blueprint = Blueprint('auth', __name__)
@@ -29,19 +29,17 @@ def login() -> Tuple[Any, int]:
 @auth.route('/register', methods=["POST"])
 def register() -> Tuple[Any, int]:
     body = request.get_json()
+    fields = ['company', 'username', 'user_role', 'email']
 
-    if (
-        not body
-        or not body.get("company", False)
-        or not body.get("username", False)
-        or not body.get("user_role", False)
-    ):
+    if any(field not in body for field in fields):
         return jsonify(), 400
 
     if not role_validation(body["user_role"]):
         return jsonify(), 404
 
-    user_id = mongo.create_user(body["username"], body["user_role"], body["company"])
+    user_id = mongo.create_user(
+        body["username"], body["user_role"], body["company"], body["email"]
+    )
 
     if not user_id:
         return jsonify({"message": "User exist or achieved company members limit"}), 403

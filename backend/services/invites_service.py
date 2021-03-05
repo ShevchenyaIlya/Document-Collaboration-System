@@ -1,6 +1,6 @@
-from typing import Any, Dict, Optional, Tuple, cast
+from typing import Dict, Optional, Tuple, cast
 
-from backend.database_handler_entity import mongo
+from backend.mongodb_handler import mongo
 
 
 def get_invites(user_id: str) -> Tuple[Dict, int]:
