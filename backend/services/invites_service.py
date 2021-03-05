@@ -2,10 +2,12 @@ from typing import Dict, Optional, Tuple, cast
 
 from backend.mongodb_handler import mongo
 
+from .send_email import send_single_mail
+
 
 def get_invites(user_id: str) -> Tuple[Dict, int]:
     if (user_invite := mongo.select_invite(user_id)) is None:
-        return {"message": "No invite"}, 404
+        return {"message": "No invite"}, 204
     else:
         document_id = str(user_invite["invite_document"])
         document = cast(Dict, mongo.find_document(document_id))
@@ -38,6 +40,7 @@ def create_invite(user_identifier: str, body: Optional[Dict]) -> Tuple[Dict, int
     if not mongo.create_invite(user["_id"], body["document"]):
         return {}, 404
 
+    send_single_mail(str(document["_id"]), "invite to accept", user)
     return {}, 201
 
 
