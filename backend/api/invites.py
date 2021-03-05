@@ -1,4 +1,4 @@
-from typing import Any, Dict, Tuple, cast
+from typing import Any, Dict, Optional, Tuple, cast
 
 from bson import ObjectId
 from flask import Blueprint, jsonify, request
@@ -9,13 +9,23 @@ from backend.database_handler_entity import mongo
 invite_api = Blueprint('invite_api', __name__)
 
 
-@invite_api.route('/invite', methods=["GET"])
+@invite_api.route('/invite', methods=["GET", "POST"])
 @jwt_required()
 def invite() -> Tuple[Any, int]:
-    user_id = ObjectId(get_jwt_identity())
+    user_id = get_jwt_identity()
 
+    if request.method == "GET":
+        response = get_invites(user_id)
+    else:
+        body = request.get_json()
+        response = create_invite(user_id, body)
+
+    return response
+
+
+def get_invites(user_id: str) -> Tuple[Any, int]:
     if (user_invite := mongo.select_invite(user_id)) is None:
-        return jsonify({}), 204
+        return jsonify({"message": "No invite"}), 404
     else:
         document_id = str(user_invite["invite_document"])
         document = cast(Dict, mongo.find_document(document_id))
@@ -31,12 +41,7 @@ def invite() -> Tuple[Any, int]:
         )
 
 
-@invite_api.route('/invite', methods=["POST"])
-@jwt_required()
-def create_invite() -> Tuple[Any, int]:
-    body = request.get_json()
-    user_identifier = get_jwt_identity()
-
+def create_invite(user_identifier: str, body: Optional[Dict]) -> Tuple[Any, int]:
     if body is None or not ObjectId.is_valid(body["document"]):
         return jsonify({}), 400
 
@@ -52,7 +57,7 @@ def create_invite() -> Tuple[Any, int]:
     ):
         return jsonify({"message": "You should have permissions for this action!"}), 403
 
-    mongo.add_invite(user["_id"], ObjectId(body["document"]))
+    mongo.create_invite(user["_id"], ObjectId(body["document"]))
     return jsonify(), 201
 
 
