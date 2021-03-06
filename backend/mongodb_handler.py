@@ -195,9 +195,9 @@ class MongoDBHandler:
     def comment_exists(self, comment_id: ObjectId) -> bool:
         return self.db.comments.count_documents({"_id": comment_id}, limit=1) != 0
 
-    def get_document_comments(self, document_id: str) -> List:
+    def get_document_comments(self, document_id: str) -> Optional[List]:
         if not ObjectId.is_valid(document_id):
-            return []
+            return None
 
         comments = list(self.db.comments.find({"document_id": document_id}))
         for comment in comments:
@@ -279,9 +279,9 @@ class MongoDBHandler:
             }
             self.db.messages.update_one(new_message, {"$set": new_message}, upsert=True)
 
-    def select_messages(self, user_id: str) -> List:
+    def select_messages(self, user_id: str) -> Optional[List]:
         if not ObjectId.is_valid(user_id):
-            return []
+            return None
 
         messages = list(self.db.messages.find({"user_to": ObjectId(user_id)}))
 
@@ -308,6 +308,18 @@ class MongoDBHandler:
             user["_id"] = str(user["_id"])
 
         return users
+
+    def create_document_version(self, document: Dict) -> None:
+        self.db.documents_versions.insert_one(
+            {
+                "version_date": datetime.now(),
+                "document_id": document["_id"],
+                "document": document,
+            }
+        )
+
+    def delete_document_versions(self, document_id: str) -> None:
+        self.db.documents_versions.delete({"document_id": document_id})
 
 
 mongo = MongoDBHandler()

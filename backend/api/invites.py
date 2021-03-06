@@ -14,12 +14,10 @@ def invite() -> Tuple[Any, int]:
     user_id = get_jwt_identity()
 
     if request.method == "GET":
-        body, status_code = service.get_invites(user_id)
+        return jsonify(service.get_invites(user_id)), 200
     else:
         body = request.get_json()
-        body, status_code = service.create_invite(user_id, body)
-
-    return jsonify(body), status_code
+        return jsonify(service.create_invite(user_id, body)), 201
 
 
 @invite_api.route('/invite/<invite_id>', methods=["POST", "DELETE"])
@@ -28,9 +26,7 @@ def accept_invite(invite_id: str) -> Tuple[Any, int]:
     user_id = get_jwt_identity()
 
     if request.method == "DELETE":
-        body, status_code = service.undo_invite(invite_id)
+        return jsonify(service.undo_invite(invite_id)), 200
     else:
         body = request.get_json()
-        body, status_code = service.accept_invite(body, user_id, invite_id)
-
-    return jsonify(body), status_code
+        return jsonify(service.accept_invite(body, user_id, invite_id)), 200
