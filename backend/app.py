@@ -1,25 +1,21 @@
-from flask import Flask, Response
+import json
+
+from flask import Flask, Response, jsonify
 from flask_jwt_extended import JWTManager
 
 from .api.auth import auth
 from .api.documents import document_api
 from .api.invites import invite_api
 from .api.messages import message_api
-from .services.send_email import mail
+from .http_exception import HTTPException
+from .services.email_sender import mail
 
 
 def create_flask_app() -> Flask:
     application = Flask(__name__)
 
-    application.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
-    application.config["JWT_SECRET_KEY"] = "super-secret-key"
-
-    application.config["MAIL_SERVER"] = "smtp.gmail.com"
-    application.config["MAIL_PORT"] = 465
-    application.config["MAIL_USERNAME"] = "onlineproductstore95@gmail.com"
-    application.config["MAIL_PASSWORD"] = "OnlineProductStore"
-    application.config["MAIL_USE_TLS"] = False
-    application.config["MAIL_USE_SSL"] = True
+    with open("config.json", "r") as config:
+        application.config.update(json.loads(config.read()))
 
     application.register_blueprint(auth)
     application.register_blueprint(document_api)
@@ -33,6 +29,13 @@ def create_flask_app() -> Flask:
 
 app = create_flask_app()
 jwt = JWTManager(app)
+
+
+@app.errorhandler(HTTPException)
+def handle_invalid_usage(error: HTTPException) -> Response:
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
 
 
 @app.after_request
