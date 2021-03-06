@@ -14,7 +14,7 @@ class APIService {
   };
 
   getUsers = async (document) => {
-    return await send_request("GET", "users/" + document);
+    return await send_request("GET", "documents/" + document + "/collaborators");
   };
 
   getMessages = async () => {
