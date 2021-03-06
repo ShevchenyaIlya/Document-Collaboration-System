@@ -13,10 +13,10 @@ auth: Blueprint = Blueprint('auth', __name__)
 def login() -> Tuple[Any, int]:
     body = request.get_json()
 
-    if not body.get("nickname", False):
+    if not body.get("username", False):
         return jsonify(body), 400
 
-    nickname = body["nickname"]
+    nickname = body["username"]
     user = mongo.find_user_by_name(nickname)
 
     if user is None:
@@ -32,16 +32,16 @@ def register() -> Tuple[Any, int]:
     fields = ['company', 'username', 'user_role', 'email']
 
     if any(field not in body for field in fields):
-        return jsonify(), 400
+        return jsonify({"message": "Incorrect body content"}), 400
 
     if not role_validation(body["user_role"]):
-        return jsonify(), 404
+        return jsonify({"message": "Invalid user role"}), 404
 
     user_id = mongo.create_user(
         body["username"], body["user_role"], body["company"], body["email"]
     )
 
     if not user_id:
-        return jsonify({"message": "User exist or achieved company members limit"}), 403
+        return jsonify({"message": "User exist or reached company members limit"}), 403
 
     return jsonify(str(user_id)), 204
