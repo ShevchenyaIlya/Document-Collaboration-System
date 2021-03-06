@@ -46,7 +46,7 @@ class Index extends React.Component {
 
     this.loadNotification = () => {
       api.getInvite().then((response_data) => {
-        if (response_data !== null) {
+        if (response_data !== null && typeof response_data.document_id !== "undefined") {
           this.setState({
             notification: {
               open: true,

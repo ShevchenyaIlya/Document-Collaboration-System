@@ -10,7 +10,7 @@ from .role import Role
 
 class MongoDBHandler:
     def __init__(self) -> None:
-        self.client = MongoClient(port=27017)
+        self.client = MongoClient("mongo")
         self.db = self.client.myDatabase
 
     def create_user(

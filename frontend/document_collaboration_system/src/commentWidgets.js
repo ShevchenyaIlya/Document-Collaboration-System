@@ -15,7 +15,9 @@ export function CommentButton({ document }) {
 
   const handleClickOpen = () => {
     api.getComments(document).then((response_data) => {
-      setComments(response_data);
+      if (response_data !== null) {
+          setComments(response_data);
+      }
     });
 
     setOpenCommentsList(true);
