@@ -1,5 +1,3 @@
-import json
-
 from flask import Flask, Response, jsonify
 from flask_jwt_extended import JWTManager
 
@@ -7,6 +5,7 @@ from .api.auth import auth
 from .api.documents import document_api
 from .api.invites import invite_api
 from .api.messages import message_api
+from .config import CONFIG
 from .http_exception import HTTPException
 from .services.email_sender import mail
 
@@ -14,8 +13,7 @@ from .services.email_sender import mail
 def create_flask_app() -> Flask:
     application = Flask(__name__)
 
-    with open("config.json", "r") as config:
-        application.config.update(json.loads(config.read()))
+    application.config.from_object(CONFIG)
 
     application.register_blueprint(auth)
     application.register_blueprint(document_api)
