@@ -8,6 +8,5 @@ build/
 env/
 venv/
 
-*.txt
 *.log
 *.cfg

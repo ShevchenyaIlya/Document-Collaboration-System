@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo
+    ports:
+      - 27018:27018
+  web:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+    links:
+      - mongo
+    environment:
+      - JWT_SECRET_KEY=super-secret-key
+      - MAIL_SERVER=smtp.gmail.com
+      - MAIL_PORT=465
+      - MAIL_USERNAME=onlineproductstore95@gmail.com
+      - MAIL_PASSWORD=OnlineProductStore
+      - MAIL_USE_TLS=False
+      - MAIL_USE_SSL=True
