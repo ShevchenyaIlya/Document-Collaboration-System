@@ -16,6 +16,6 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pipenv
-          pip install -p Pipfile
+          pip install -r Pipfile
       - name: Run tests with pytest
         run: pytest
