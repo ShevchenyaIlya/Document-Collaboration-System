@@ -1,4 +1,4 @@
-import List from "./list";
+import SimpleList from "./list";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -13,7 +13,7 @@ function DocumentList() {
 
   return (
     <div className={classes.root}>
-      <List />
+      <SimpleList />
     </div>
   );
 }

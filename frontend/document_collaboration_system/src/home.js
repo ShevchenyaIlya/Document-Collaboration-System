@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ControlledAccordions from "./accordion";
+import ControlledAccordions from "./documents/accordion";
 import { useHistory } from "react-router-dom";
 
 function Home({ setDocument }) {

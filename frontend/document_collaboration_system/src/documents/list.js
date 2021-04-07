@@ -23,6 +23,7 @@ export default function SimpleList() {
   const history = useHistory();
   const { alertContent } = useContext(AppContext);
   let [documents, setDocuments] = useState([]);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem("token") === null) {
@@ -50,6 +51,8 @@ export default function SimpleList() {
           {documents.map((single_document) => (
             <DocumentListItem
               key={single_document._id}
+              expanded={expanded}
+              setExpanded={setExpanded}
               history={history}
               single_document={single_document}
             />

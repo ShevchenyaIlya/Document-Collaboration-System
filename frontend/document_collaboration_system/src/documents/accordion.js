@@ -6,10 +6,10 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Button, TextField } from "@material-ui/core";
-import api from "./services/APIService";
+import api from "../services/APIService";
 import { useHistory } from "react-router-dom";
-import { AppContext } from "./";
-import "./css/base.css";
+import { AppContext } from "../";
+import "../css/base.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
