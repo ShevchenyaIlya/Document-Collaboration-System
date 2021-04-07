@@ -9,19 +9,24 @@ import api from "../services/APIService";
 import { AppContext } from "../";
 import _ from "lodash";
 import { useHistory } from "react-router-dom";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import EmptyPageContent from "../common/emptyPageContent";
 
 function Messages() {
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { alertContent } = useContext(AppContext);
   const history = useHistory();
 
   const updateMessages = useCallback(() => {
+    setLoading(true);
     api.getMessages().then((response) => {
       if (response !== null) {
         if (!_.isEqual(response, messages)) {
           setMessages(response);
         }
       }
+      setLoading(false);
     });
   }, [messages]);
 
@@ -41,6 +46,18 @@ function Messages() {
       };
     }
   }, [alertContent, history, updateMessages]);
+
+  if (loading) {
+    return (
+        <LinearProgress />
+    );
+  }
+
+  if (messages.length < 1) {
+    return (
+      <EmptyPageContent page="Messages" message="Currently no messages have been created"/>
+    );
+  }
 
   return (
     <div className="chat">
