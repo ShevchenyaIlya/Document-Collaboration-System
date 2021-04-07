@@ -21,39 +21,6 @@ main {
     margin: 0 300px;
 }
 
-nav.navbar {
-    flex-grow: 1;
-    width: 100%;
-    background-color: dimgray;
-    overflow: auto;
-    box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
-}
-
-nav.navbar div {
-    margin: 0 300px;
-}
-
-nav.navbar .link {
-    float: left;
-    text-align: center;
-    padding: 12px;
-    color: white;
-    text-decoration: none;
-    font-size: 17px;
-}
-
-nav.navbar .link:hover {
-    background-color:rgba(0, 0, 0, 0.5);
-}
-
-.active {
-    background-color: darkslategray;
-}
-
-nav.navbar .link.right {
-    float: right;
-}
-
 .createDocument {
     min-height: 600px;
     margin: 30px;
@@ -83,15 +50,7 @@ nav.navbar .link.right {
     min-height: 600px;
 }
 
-@media screen and (max-width: 500px) {
-    nav.navbar .link.right {
-        float: left;
-    }
-
-    nav.navbar div {
-       margin: 10px;
-    }
-
+@media screen and (max-width: 1000px) {
     main {
         margin: 0;
     }
