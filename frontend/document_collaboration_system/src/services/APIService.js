@@ -5,6 +5,10 @@ class APIService {
     return await send_request("POST", "login", body);
   };
 
+  userProfile= async () => {
+    return await send_request("GET", "profile");
+  };
+
   postComment = async (document, body) => {
     return await send_request("POST", `documents/${document}/comments`, body);
   };

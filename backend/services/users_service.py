@@ -43,3 +43,14 @@ def user_register(body: Dict) -> str:
         raise HTTPException("User exist or reached company members limit", 403)
 
     return str(user_id)
+
+
+def user_profile(user_id: str) -> Dict:
+    user = mongo.find_user_by_id(user_id)
+
+    if user is None:
+        raise HTTPException("Such user does not exist", 409)
+
+    user["_id"] = str(user["_id"])
+
+    return user
