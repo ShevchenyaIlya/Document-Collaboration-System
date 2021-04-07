@@ -14,7 +14,7 @@ export default function EditCommentDialog({
   setOpen,
   comments,
   setComments,
-  document
+  document,
 }) {
   const [newCommentText, commentChange] = useState("");
   const onChangeComment = useCallback(

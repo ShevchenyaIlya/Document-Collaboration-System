@@ -1,11 +1,12 @@
 import React from "react";
 import "../css/base.css";
+import { Typography } from "@material-ui/core";
 
 function Footer() {
   return (
-    <div className="footer">
-      <h4>Ilya Shevchenya</h4>
-    </div>
+    <footer>
+      <Typography variant={"h5"}>Ilya Shevchenya</Typography>
+    </footer>
   );
 }
 

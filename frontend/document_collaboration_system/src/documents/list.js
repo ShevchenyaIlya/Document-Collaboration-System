@@ -10,7 +10,6 @@ import { AppContext } from "../";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "1000px",
     margin: "auto",
     backgroundColor: theme.palette.background.paper,
   },

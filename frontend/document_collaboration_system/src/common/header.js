@@ -1,14 +1,17 @@
 import React from "react";
 import "../css/base.css";
+import { Typography } from "@material-ui/core";
+import DescriptionIcon from "@material-ui/icons/Description";
 
 function Header() {
   return (
-    <div className="header">
-      <h1>Document collaboration system</h1>
-      <p>
-        A <b>responsive</b> website created by me.
-      </p>
-    </div>
+    <header>
+      <Typography variant={"h2"}>
+        {" "}
+        <DescriptionIcon style={{ width: "40px", height: "40px" }} /> Document
+        collaboration system
+      </Typography>
+    </header>
   );
 }
 

@@ -8,7 +8,6 @@ import { AppContext } from "../";
 import InviteUserDialog from "../invites/inviteUserDialog";
 import api from "../services/APIService";
 
-
 export default function CustomMenu({ document, readOnly, setMode }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [inviteDialog, openDialog] = useState(false);

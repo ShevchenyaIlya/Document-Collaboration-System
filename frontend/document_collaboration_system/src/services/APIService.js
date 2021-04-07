@@ -6,7 +6,11 @@ class APIService {
   };
 
   postComment = async (document, body) => {
-    return await send_request("POST", "documents/" + document + "/comments", body);
+    return await send_request(
+      "POST",
+      "documents/" + document + "/comments",
+      body
+    );
   };
 
   postMessage = async (body) => {
@@ -14,7 +18,10 @@ class APIService {
   };
 
   getUsers = async (document) => {
-    return await send_request("GET", "documents/" + document + "/collaborators");
+    return await send_request(
+      "GET",
+      "documents/" + document + "/collaborators"
+    );
   };
 
   getMessages = async () => {
@@ -22,7 +29,11 @@ class APIService {
   };
 
   changeDocumentState = async (operation, document) => {
-    return await send_request("PUT", "documents/" + document, JSON.stringify({operation: operation}));
+    return await send_request(
+      "PUT",
+      "documents/" + document,
+      JSON.stringify({ operation: operation })
+    );
   };
 
   deleteDocument = async (document) => {
@@ -62,11 +73,18 @@ class APIService {
   };
 
   updateComment = async (documentId, commentId, body) => {
-    return await send_request("PUT", "documents/" + documentId + "/comments/" + commentId, body);
+    return await send_request(
+      "PUT",
+      "documents/" + documentId + "/comments/" + commentId,
+      body
+    );
   };
 
   deleteComment = async (documentId, commentId) => {
-    return await send_request("DELETE", "documents/" + documentId + "/comments/" + commentId);
+    return await send_request(
+      "DELETE",
+      "documents/" + documentId + "/comments/" + commentId
+    );
   };
 
   getComments = async (documentId) => {

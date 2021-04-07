@@ -51,28 +51,30 @@ export default function ControlledAccordions({ setDocument }) {
       });
       history.push("/login");
     } else {
-      api.postDocument(JSON.stringify({document_name: documentIdentifier})).then((data) => {
-        if (data !== null) {
-          const { message } = data;
+      api
+        .postDocument(JSON.stringify({ document_name: documentIdentifier }))
+        .then((data) => {
+          if (data !== null) {
+            const { message } = data;
 
-          if (typeof message === "undefined") {
-            setDocument(data);
-            history.push("/api/document/" + data);
+            if (typeof message === "undefined") {
+              setDocument(data);
+              history.push("/api/document/" + data);
+            } else {
+              alertContent.handler({
+                alertOpen: true,
+                alertMessage: message,
+                type: "error",
+              });
+            }
           } else {
             alertContent.handler({
               alertOpen: true,
-              alertMessage: message,
-              type: "error",
+              alertMessage: "Please use another document name!",
+              type: "warning",
             });
           }
-        } else {
-          alertContent.handler({
-            alertOpen: true,
-            alertMessage: "Please use another document name!",
-            type: "warning",
-          });
-        }
-      });
+        });
     }
   };
 

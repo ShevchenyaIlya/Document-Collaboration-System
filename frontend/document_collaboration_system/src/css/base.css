@@ -3,32 +3,37 @@ body {
     min-height: 100%;
 }
 
-.header {
-    padding: 40px;
+header {
+    padding: 60px;
     text-align: center;
     background-image: linear-gradient(to bottom right, blue, white);
     color: black;
     font-size: 30px;
 }
 
-.footer {
+footer {
     padding: 20px;
     text-align: center;
     background-image: linear-gradient(to bottom right, white, blue);
 }
 
-.navbar {
+main {
+    margin: 0 300px;
+}
+
+nav.navbar {
+    flex-grow: 1;
     width: 100%;
     background-color: dimgray;
     overflow: auto;
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
 }
 
-.navbar div {
-    margin-left: 50px;
-    margin-right: 50px;
+nav.navbar div {
+    margin: 0 300px;
 }
 
-.navbar .link {
+nav.navbar .link {
     float: left;
     text-align: center;
     padding: 12px;
@@ -37,7 +42,7 @@ body {
     font-size: 17px;
 }
 
-.navbar .link:hover {
+nav.navbar .link:hover {
     background-color:rgba(0, 0, 0, 0.5);
 }
 
@@ -45,7 +50,7 @@ body {
     background-color: darkslategray;
 }
 
-.navbar .link.right {
+nav.navbar .link.right {
     float: right;
 }
 
@@ -88,17 +93,20 @@ body {
     float: right;
 }
 
-.errorPage h1, h2{
-    text-align: center;
-}
-
 .chat {
     min-height: 600px;
 }
 
 @media screen and (max-width: 500px) {
-    .navbar a {
-        float: none;
-        display: block;
+    nav.navbar .link.right {
+        float: left;
+    }
+
+    nav.navbar div {
+       margin: 10px;
+    }
+
+    main {
+        margin: 0;
     }
 }

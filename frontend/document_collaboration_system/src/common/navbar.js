@@ -26,9 +26,9 @@ function Navbar() {
   }, []);
 
   return (
-    <div className="navbar">
+    <nav className="navbar">
       <div>
-        <Link className="active link" to="/api/">
+        <Link className="active link" to="/">
           <i className="fa fa-fw fa-home"></i> Home
         </Link>
         <Link className="link" to="/api/documents">
@@ -37,14 +37,22 @@ function Navbar() {
         <Link className="link" to="/api/messages">
           <i className="fa fa-fw fa-comments"></i> Messages
         </Link>
-        <Link className="right link" to="/login">
-          <i className="fa fa-fw fa-user"></i> Sign In
-        </Link>
-        <Link className="right link" to="#" onClick={logoutUser}>
-          {username}
-        </Link>
+        {username ? (
+          <>
+            <Link className="link right" to="#" onClick={logoutUser}>
+              <i className="fa fa-sign-out"></i> Log out
+            </Link>
+            <Link className="link right" to="#" onClick={logoutUser}>
+              <i className="fa fa-fw fa-user-circle"></i> {username}
+            </Link>
+          </>
+        ) : (
+          <Link className="link right" to="/login">
+            <i className="fa fa-fw fa-user"></i> Sign In
+          </Link>
+        )}
       </div>
-    </div>
+    </nav>
   );
 }
 

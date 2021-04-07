@@ -5,7 +5,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import SendMessageDialog from "./messageDialog";
 import api from "../services/APIService";
 
-
 export function MessageButton({ document }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDialog, setOpen] = useState(false);

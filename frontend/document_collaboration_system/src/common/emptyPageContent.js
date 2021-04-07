@@ -1,9 +1,7 @@
-import React from "react";
-import "../css/base.css";
-import { useLocation } from "react-router-dom";
+import Paper from "@material-ui/core/Paper";
 import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
 import { Typography } from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles(() => ({
@@ -12,7 +10,7 @@ export const useStyles = makeStyles(() => ({
     maxWidth: "450px",
     padding: "30px",
   },
-  paperIcon: {
+  icon: {
     display: "flex",
     alignItems: "center",
     flexWrap: "wrap",
@@ -26,18 +24,17 @@ export const useStyles = makeStyles(() => ({
   },
 }));
 
-export function Error404() {
-  const location = useLocation();
+export default function EmptyPageContent({ page, message }) {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.root} elevation={3}>
-      <SentimentVeryDissatisfiedIcon className={classes.paperIcon} />
+    <Paper className={classes.root}>
+      <SentimentVeryDissatisfiedIcon className={classes.icon} />
       <Typography variant={"h4"} className={classes.pageHeader}>
-        404 Resource not found
+        {page}
       </Typography>
       <Typography variant={"h5"} className={classes.pageHeader}>
-        at '{location.pathname}'
+        {message}
       </Typography>
     </Paper>
   );

@@ -15,7 +15,6 @@ export default function InviteUserDialog({ openDialog, setOpen, document }) {
     []
   );
 
-
   const handleClose = () => {
     setOpen(false);
     setUsername("");
