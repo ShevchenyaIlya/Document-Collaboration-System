@@ -2,11 +2,11 @@ import React, { useContext, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import "./css/base.css";
+import "../css/base.css";
 import { useHistory } from "react-router-dom";
-import { AppContext } from "./";
-import InviteUserDialog from "./inviteUserDialog";
-import api from "./services/APIService";
+import { AppContext } from "../";
+import InviteUserDialog from "../invites/inviteUserDialog";
+import api from "../services/APIService";
 
 
 export default function CustomMenu({ document, readOnly, setMode }) {

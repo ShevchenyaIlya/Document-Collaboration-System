@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import "./css/index.css";
 import App from "./App";
 import Home from "./home";
-import DocumentList from "./documentList";
-import Login from "./login";
+import DocumentList from "./documents/documentList";
+import Login from "./auth/login";
 import reportWebVitals from "./reportWebVitals";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
@@ -14,13 +14,13 @@ import {
   Redirect,
 } from "react-router-dom";
 import CustomizedSnackbars from "./customAlert";
-import InviteSnackbar from "./inviteAlert";
+import InviteSnackbar from "./invites/inviteAlert";
 import api from "./services/APIService";
-import Messages from "./chat";
-import { Error404 } from "./error";
-import Header from "./header";
-import Navbar from "./navbar";
-import Footer from "./footer";
+import Messages from "./messages/chat";
+import { Error404 } from "./common/error";
+import Header from "./common/header";
+import Navbar from "./common/navbar";
+import Footer from "./common/footer";
 
 export const AppContext = createContext();
 

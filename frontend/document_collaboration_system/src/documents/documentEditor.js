@@ -3,9 +3,9 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Paper } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import CustomMenu from "./menu";
-import FormDialog from "./placeCommentDialog";
-import { CommentButton } from "./commentWidgets";
-import { MessageButton } from "./messageButton";
+import FormDialog from "../comments/placeCommentDialog";
+import { CommentButton } from "../comments/commentWidgets";
+import { MessageButton } from "../messages/messageButton";
 import ControlledEditor from "./controlledEditor";
 
 function DocumentEditor({ document }) {

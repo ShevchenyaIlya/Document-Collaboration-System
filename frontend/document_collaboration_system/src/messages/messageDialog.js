@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from "react";
-import { AppContext } from "./";
+import { AppContext } from "../";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -11,7 +11,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { TextField } from "@material-ui/core";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import api from "./services/APIService";
+import api from "../services/APIService";
 
 export default function SendMessageDialog({
   openDialog,

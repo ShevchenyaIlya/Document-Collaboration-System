@@ -1,5 +1,5 @@
 import React from "react";
-import "./css/base.css";
+import "../css/base.css";
 import { useLocation } from "react-router-dom";
 
 export function Error404() {

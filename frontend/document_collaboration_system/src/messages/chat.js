@@ -1,12 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import "./css/base.css";
+import "../css/base.css";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MessageIcon from "@material-ui/icons/Message";
 import ListItemText from "@material-ui/core/ListItemText";
 import List from "@material-ui/core/List";
-import api from "./services/APIService";
-import { AppContext } from "./";
+import api from "../services/APIService";
+import { AppContext } from "../";
 import _ from "lodash";
 import { useHistory } from "react-router-dom";
 

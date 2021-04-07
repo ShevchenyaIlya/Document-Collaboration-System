@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import SendMessageDialog from "./messageDialog";
-import api from "./services/APIService";
+import api from "../services/APIService";
 
 
 export function MessageButton({ document }) {

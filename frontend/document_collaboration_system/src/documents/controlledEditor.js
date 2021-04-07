@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
-import api from "./services/APIService";
+import api from "../services/APIService";
 import _ from "lodash";
 import { Editor } from "react-draft-wysiwyg";
 import CustomOption from "./customOption";
