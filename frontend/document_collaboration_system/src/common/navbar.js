@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,9 +63,11 @@ function Navbar() {
   return (
       <AppBar position="static" component={"nav"} className={classes.root}>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={moveHome}>
-            <MenuIcon />
-          </IconButton>
+          <Tooltip title="Main page">
+            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={moveHome}>
+              <MenuIcon />
+            </IconButton>
+          </Tooltip>
           <Typography variant="h6" className={classes.title} onClick={moveHome}>
               <Link to="/" className={`${classes.linkDecoration} ${classes.whiteText}`}>Home</Link>
           </Typography>

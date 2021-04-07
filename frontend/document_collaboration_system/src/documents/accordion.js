@@ -10,6 +10,7 @@ import api from "../services/APIService";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "../";
 import "../css/base.css";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -135,9 +136,11 @@ export default function ControlledAccordions({ setDocument }) {
                 onChange={onChangeDocumentName}
               />
             </div>
-            <Button variant="outlined" type="submit">
-              Create
-            </Button>
+            <Tooltip title="Create new document">
+              <Button variant="outlined" type="submit">
+                Create
+              </Button>
+            </Tooltip>
           </form>
         </AccordionDetails>
       </Accordion>
@@ -169,9 +172,11 @@ export default function ControlledAccordions({ setDocument }) {
                 onChange={onChangeDocumentName}
               />
             </div>
-            <Button variant="outlined" type="submit">
-              Open
-            </Button>
+            <Tooltip title="Open existing document">
+              <Button variant="outlined" type="submit">
+                Open
+              </Button>
+            </Tooltip>
           </form>
         </AccordionDetails>
       </Accordion>

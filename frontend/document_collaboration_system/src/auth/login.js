@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import api from "../services/APIService";
+import Tooltip from "@material-ui/core/Tooltip";
 
 export const useStyles = makeStyles(() => ({
   root: {
@@ -76,13 +77,16 @@ function Login({ setUsername }) {
             id="filled-basic"
             value={textField}
             onChange={onChangeUsername}
+            autoFocus={true}
             label="Username"
             variant="filled"
             className={classes.textField}
           />
-          <Button type="submit" variant="outlined" className={classes.button}>
-            Sign In
-          </Button>
+          <Tooltip title="Login to this site">
+            <Button type="submit" variant="outlined" className={classes.button}>
+              Sign In
+            </Button>
+          </Tooltip>
         </Grid>
       </form>
     </Paper>

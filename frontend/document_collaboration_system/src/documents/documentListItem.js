@@ -12,6 +12,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import DescriptionTwoToneIcon from "@material-ui/icons/DescriptionTwoTone";
 import Box from '@material-ui/core/Box';
+import Tooltip from "@material-ui/core/Tooltip";
 
 export const useStyles = makeStyles((theme) => ({
   root: {
@@ -132,9 +133,11 @@ export default function DocumentListItem({
         </AccordionDetails>
         <Divider />
         <AccordionActions>
-          <Button variant="contained" size="small" onClick={handleClick}>
-            Details
-          </Button>
+          <Tooltip title="Open document editor">
+            <Button variant="contained" size="small" onClick={handleClick}>
+              Edit document
+            </Button>
+          </Tooltip>
         </AccordionActions>
       </Accordion>
     </>
