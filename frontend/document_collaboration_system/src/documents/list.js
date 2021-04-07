@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import { useHistory } from "react-router-dom";
 import DocumentListItem from "./documentListItem";
 import api from "../services/APIService";
 import { AppContext } from "../";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import EmptyPageContent from "../common/emptyPageContent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +25,7 @@ export default function SimpleList() {
   const { alertContent } = useContext(AppContext);
   let [documents, setDocuments] = useState([]);
   const [expanded, setExpanded] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (sessionStorage.getItem("token") === null) {
@@ -34,30 +36,42 @@ export default function SimpleList() {
       });
       history.push("/login");
     } else {
+      setLoading(true);
       api.getDocuments().then((data) => {
         if (data !== null) {
           setDocuments(data);
         } else {
           history.push("/login");
         }
+        setLoading(false);
       });
     }
   }, []);
 
+  if (loading) {
+    return (
+        <LinearProgress />
+    );
+  }
+
+  if (documents.length < 1) {
+    return (
+      <EmptyPageContent page="Documents" message="Currently no documents have been created"/>
+    );
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.root}>
-        <List component="nav" aria-label="main mailbox folders">
-          {documents.map((single_document) => (
-            <DocumentListItem
-              key={single_document._id}
-              expanded={expanded}
-              setExpanded={setExpanded}
-              history={history}
-              single_document={single_document}
-            />
-          ))}
-        </List>
+        {documents.map((single_document) => (
+          <DocumentListItem
+            key={single_document._id}
+            expanded={expanded}
+            setExpanded={setExpanded}
+            history={history}
+            single_document={single_document}
+          />
+        ))}
         <Divider />
       </div>
     </div>
