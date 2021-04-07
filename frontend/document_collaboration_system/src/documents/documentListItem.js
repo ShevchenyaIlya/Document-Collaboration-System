@@ -11,6 +11,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import DescriptionTwoToneIcon from "@material-ui/icons/DescriptionTwoTone";
+import Box from '@material-ui/core/Box';
 
 export const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +22,7 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   paper: {
-    padding: "20px 40px",
+    padding: "0 40px",
     textAlign: "left",
     color: theme.palette.text.primary,
     "& > h6, span": {
@@ -89,25 +90,41 @@ export default function DocumentListItem({
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Typography variant="h6">Identifier: </Typography>
-                  <Typography variant="h7">{_id}</Typography>
+                  <Typography variant="h6">
+                    <Box fontWeight="fontWeightRegular" m={1}>
+                      {_id}
+                    </Box>
+                  </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Typography variant="h6">Creation date: </Typography>
-                  <Typography variant="h7">{creation_date}</Typography>
+                  <Typography variant="h6">
+                    <Box fontWeight="fontWeightRegular" m={1}>
+                      {creation_date}
+                    </Box>
+                  </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Typography variant="h6">Status: </Typography>
-                  <Typography variant="h7">{status}</Typography>
+                  <Typography variant="h6">
+                    <Box fontWeight="fontWeightRegular" m={1}>
+                      {status}
+                    </Box>
+                  </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Typography variant="h6">Creator: </Typography>
-                  <Typography variant="h7">{creator}</Typography>
+                  <Typography variant="h6">
+                    <Box fontWeight="fontWeightRegular" m={1}>
+                      {creator}
+                    </Box>
+                  </Typography>
                 </Paper>
               </Grid>
             </Grid>
