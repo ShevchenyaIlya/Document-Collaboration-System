@@ -7,6 +7,7 @@ import FormDialog from "../comments/placeCommentDialog";
 import { CommentButton } from "../comments/commentWidgets";
 import { MessageButton } from "../messages/messageButton";
 import ControlledEditor from "./controlledEditor";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 function DocumentEditor({ document }) {
   let [readOnlyDocument, setMode] = useState(false);
@@ -22,14 +23,19 @@ function DocumentEditor({ document }) {
         document={document}
         selectedText={selectedText}
       />
-      <CustomMenu
-        document={document}
-        readOnly={readOnlyDocument}
-        setMode={setMode}
-      />
+      <ButtonGroup
+        aria-label="outlined primary button group"
+        style={{ margin: "20px auto" }}
+      >
+        <CustomMenu
+          document={document}
+          readOnly={readOnlyDocument}
+          setMode={setMode}
+        />
+        <CommentButton document={document} />
+        <MessageButton document={document} />
+      </ButtonGroup>
 
-      <CommentButton document={document} />
-      <MessageButton document={document} />
       <Paper elevation={3} className="editorContainer">
         <ControlledEditor
           document={document}

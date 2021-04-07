@@ -16,7 +16,6 @@ import { Error404 } from "./common/error";
 import Header from "./common/header";
 import Navbar from "./common/navbar";
 import Main from "./main";
-import EmptyPageContent from "./common/emptyPageContent";
 
 export const AppContext = createContext();
 
@@ -117,9 +116,6 @@ class Index extends React.Component {
                 </Route>
                 <Route exact path="/">
                   <Main />
-                </Route>
-                <Route exact path="/aaa/">
-                  <EmptyPageContent page="PAGE" message="No message" />
                 </Route>
                 <Route path="*">
                   <Error404 />

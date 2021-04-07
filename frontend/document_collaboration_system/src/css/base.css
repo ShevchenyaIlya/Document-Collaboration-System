@@ -65,19 +65,9 @@ nav.navbar .link.right {
 }
 
 .editorContainer {
-    width: 60%;
-    margin: 30px auto;
+    width: 100%;
+    margin: auto;
     min-height: 1000px
-}
-
-#menuButton {
-    min-width: 140px;
-    float: left;
-    margin: 10px;
-}
-
-.menuListItem {
-    min-width: 140px;
 }
 
 #customEditorButton {
@@ -87,10 +77,6 @@ nav.navbar .link.right {
 
 #customEditorButton:hover {
     cursor: pointer;
-}
-
-.commentsButtonContainer {
-    float: right;
 }
 
 .chat {

@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import { AppContext } from "../";
 import InviteUserDialog from "../invites/inviteUserDialog";
 import api from "../services/APIService";
+import MenuOutlinedIcon from "@material-ui/icons/MenuOutlined";
 
 export default function CustomMenu({ document, readOnly, setMode }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -79,14 +80,9 @@ export default function CustomMenu({ document, readOnly, setMode }) {
   };
 
   return (
-    <div>
-      <Button
-        aria-controls="simple-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-        id="menuButton"
-      >
-        File
+    <>
+      <Button onClick={handleClick} variant="outlined">
+        <MenuOutlinedIcon style={{ marginRight: "10px" }} /> File
       </Button>
       <Menu
         id="simple-menu"
@@ -98,7 +94,7 @@ export default function CustomMenu({ document, readOnly, setMode }) {
         <MenuItem onClick={saveDocumentVersion}>Save</MenuItem>
         <MenuItem
           onClick={documentOperation("approve")}
-          className="menuListItem"
+          style={{ minWidth: "140px" }}
         >
           Agreed
         </MenuItem>
@@ -120,6 +116,6 @@ export default function CustomMenu({ document, readOnly, setMode }) {
         openDialog={inviteDialog}
         setOpen={openDialog}
       />
-    </div>
+    </>
   );
 }

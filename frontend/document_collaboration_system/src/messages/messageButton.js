@@ -4,6 +4,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import SendMessageDialog from "./messageDialog";
 import api from "../services/APIService";
+import EmailOutlinedIcon from "@material-ui/icons/EmailOutlined";
 
 export function MessageButton({ document }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -29,14 +30,9 @@ export function MessageButton({ document }) {
   };
 
   return (
-    <div className="commentsButtonContainer">
-      <Button
-        aria-controls="simple-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-        id="menuButton"
-      >
-        Message
+    <>
+      <Button onClick={handleClick} variant="outlined">
+        <EmailOutlinedIcon style={{ marginRight: "10px" }} /> Message
       </Button>
       <Menu
         id="simple-menu"
@@ -54,6 +50,6 @@ export function MessageButton({ document }) {
         messageMode={personalMode}
         users={users}
       />
-    </div>
+    </>
   );
 }

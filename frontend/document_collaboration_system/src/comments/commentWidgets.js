@@ -4,6 +4,7 @@ import EditCommentDialog from "./editCommentsDialog";
 import CommentsDialog from "./commentsDialog";
 import "../css/base.css";
 import api from "../services/APIService";
+import CommentOutlinedIcon from "@material-ui/icons/CommentOutlined";
 
 export function CommentButton({ document }) {
   const [openCommentsList, setOpenCommentsList] = useState(false);
@@ -24,14 +25,9 @@ export function CommentButton({ document }) {
   };
 
   return (
-    <div className="commentsButtonContainer">
-      <Button
-        aria-controls="simple-menu"
-        aria-haspopup="true"
-        onClick={handleClickOpen}
-        id="menuButton"
-      >
-        Comments
+    <>
+      <Button onClick={handleClickOpen} variant="outlined">
+        <CommentOutlinedIcon style={{ marginRight: "10px" }} /> Comments
       </Button>
       <CommentsDialog
         open={openCommentsList}
@@ -46,6 +42,6 @@ export function CommentButton({ document }) {
         setComments={setComments}
         document={document}
       />
-    </div>
+    </>
   );
 }
