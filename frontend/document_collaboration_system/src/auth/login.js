@@ -7,7 +7,10 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import api from "../services/APIService";
 import Tooltip from "@material-ui/core/Tooltip";
-import {ValidationService, fieldValidation} from "../services/ValidationService";
+import {
+  ValidationService,
+  fieldValidation,
+} from "../services/ValidationService";
 import ValidationError from "../errors/ValidationError";
 
 export const useStyles = makeStyles(() => ({
@@ -42,16 +45,16 @@ function Login({ setUsername }) {
 
   const inputFieldValidation = () => {
     try {
-          ValidationService.validateUsername(textField);
+      ValidationService.validateUsername(textField);
     } catch (e) {
-        if (e instanceof ValidationError) {
-            alertContent.handler({
-                alertOpen: true,
-                alertMessage: e.message,
-                type: "error",
-            });
-            return false;
-        }
+      if (e instanceof ValidationError) {
+        alertContent.handler({
+          alertOpen: true,
+          alertMessage: e.message,
+          type: "error",
+        });
+        return false;
+      }
     }
 
     return true;
@@ -62,28 +65,28 @@ function Login({ setUsername }) {
 
     if (inputFieldValidation()) {
       api
-          .userLogin(JSON.stringify({username: textField}))
-          .then((response_data) => {
-            if (response_data === null) {
-              alertContent.handler({
-                alertOpen: true,
-                alertMessage: "Such user does not exists!",
-                type: "error",
-              });
-            } else {
-              alertContent.handler({
-                alertOpen: true,
-                alertMessage: "Success login!",
-                type: "success",
-              });
-              const {username, token, id} = response_data;
-              sessionStorage.setItem("token", token);
-              sessionStorage.setItem("id", id);
-              sessionStorage.setItem("username", username);
-              setUsername(username);
-              history.push("/");
-            }
-          });
+        .userLogin(JSON.stringify({ username: textField }))
+        .then((response_data) => {
+          if (response_data === null) {
+            alertContent.handler({
+              alertOpen: true,
+              alertMessage: "Such user does not exists!",
+              type: "error",
+            });
+          } else {
+            alertContent.handler({
+              alertOpen: true,
+              alertMessage: "Success login!",
+              type: "success",
+            });
+            const { username, token, id } = response_data;
+            sessionStorage.setItem("token", token);
+            sessionStorage.setItem("id", id);
+            sessionStorage.setItem("username", username);
+            setUsername(username);
+            history.push("/");
+          }
+        });
     }
   };
   return (
@@ -100,7 +103,10 @@ function Login({ setUsername }) {
             onChange={onChangeUsername}
             autoFocus={true}
             label="Username"
-            error={fieldValidation(textField, ValidationService.validateUsername)}
+            error={fieldValidation(
+              textField,
+              ValidationService.validateUsername
+            )}
             variant="filled"
             className={classes.textField}
           />

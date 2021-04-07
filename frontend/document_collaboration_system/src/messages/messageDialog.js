@@ -12,7 +12,10 @@ import { TextField } from "@material-ui/core";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import api from "../services/APIService";
-import {fieldValidation, ValidationService} from "../services/ValidationService";
+import {
+  fieldValidation,
+  ValidationService,
+} from "../services/ValidationService";
 
 export default function SendMessageDialog({
   openDialog,
@@ -39,16 +42,16 @@ export default function SendMessageDialog({
 
   const sendMessage = (users, messageText) => {
     api
-        .postMessage(JSON.stringify({to_users: users, message: messageText}))
-        .then((response) => {
-          if (typeof response.message !== "undefined") {
-            alertContent.handler({
-              alertOpen: true,
-              alertMessage: response.message,
-              type: "error",
-            });
-          }
-        });
+      .postMessage(JSON.stringify({ to_users: users, message: messageText }))
+      .then((response) => {
+        if (typeof response.message !== "undefined") {
+          alertContent.handler({
+            alertOpen: true,
+            alertMessage: response.message,
+            type: "error",
+          });
+        }
+      });
   };
 
   const handleSend = () => {

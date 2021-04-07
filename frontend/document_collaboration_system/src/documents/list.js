@@ -49,14 +49,15 @@ export default function SimpleList() {
   }, []);
 
   if (loading) {
-    return (
-        <LinearProgress />
-    );
+    return <LinearProgress />;
   }
 
   if (documents.length < 1) {
     return (
-      <EmptyPageContent page="Documents" message="Currently no documents have been created"/>
+      <EmptyPageContent
+        page="Documents"
+        message="Currently no documents have been created"
+      />
     );
   }
 

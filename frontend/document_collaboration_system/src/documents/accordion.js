@@ -11,7 +11,10 @@ import { useHistory } from "react-router-dom";
 import { AppContext } from "../";
 import "../css/base.css";
 import Tooltip from "@material-ui/core/Tooltip";
-import {fieldValidation, ValidationService} from "../services/ValidationService";
+import {
+  fieldValidation,
+  ValidationService,
+} from "../services/ValidationService";
 import ValidationError from "../errors/ValidationError";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,16 +46,16 @@ export default function ControlledAccordions({ setDocument }) {
 
   const inputFieldValidation = () => {
     try {
-          ValidationService.validateDocumentId(documentIdentifier);
+      ValidationService.validateDocumentId(documentIdentifier);
     } catch (e) {
-        if (e instanceof ValidationError) {
-            alertContent.handler({
-                alertOpen: true,
-                alertMessage: e.message,
-                type: "error",
-            });
-            return false;
-        }
+      if (e instanceof ValidationError) {
+        alertContent.handler({
+          alertOpen: true,
+          alertMessage: e.message,
+          type: "error",
+        });
+        return false;
+      }
     }
 
     return true;
@@ -74,29 +77,29 @@ export default function ControlledAccordions({ setDocument }) {
     } else {
       if (inputFieldValidation()) {
         api
-            .postDocument(JSON.stringify({document_name: documentIdentifier}))
-            .then((data) => {
-              if (data !== null) {
-                const {message} = data;
+          .postDocument(JSON.stringify({ document_name: documentIdentifier }))
+          .then((data) => {
+            if (data !== null) {
+              const { message } = data;
 
-                if (typeof message === "undefined") {
-                  setDocument(data);
-                  history.push("/api/document/" + data);
-                } else {
-                  alertContent.handler({
-                    alertOpen: true,
-                    alertMessage: message,
-                    type: "error",
-                  });
-                }
+              if (typeof message === "undefined") {
+                setDocument(data);
+                history.push("/api/document/" + data);
               } else {
                 alertContent.handler({
                   alertOpen: true,
-                  alertMessage: "Please use another document name!",
-                  type: "warning",
+                  alertMessage: message,
+                  type: "error",
                 });
               }
-            });
+            } else {
+              alertContent.handler({
+                alertOpen: true,
+                alertMessage: "Please use another document name!",
+                type: "warning",
+              });
+            }
+          });
       }
     }
   };
@@ -157,7 +160,10 @@ export default function ControlledAccordions({ setDocument }) {
                 variant="outlined"
                 className="documentInput"
                 value={documentIdentifier}
-                error={fieldValidation(documentIdentifier, ValidationService.validateDocumentId)}
+                error={fieldValidation(
+                  documentIdentifier,
+                  ValidationService.validateDocumentId
+                )}
                 onChange={onChangeDocumentName}
               />
             </div>
@@ -194,7 +200,10 @@ export default function ControlledAccordions({ setDocument }) {
                 variant="outlined"
                 className="documentInput"
                 value={documentIdentifier}
-                error={fieldValidation(documentIdentifier, ValidationService.validateDocumentId)}
+                error={fieldValidation(
+                  documentIdentifier,
+                  ValidationService.validateDocumentId
+                )}
                 onChange={onChangeDocumentName}
               />
             </div>

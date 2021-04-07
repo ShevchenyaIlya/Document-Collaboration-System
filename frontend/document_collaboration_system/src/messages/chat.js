@@ -48,14 +48,15 @@ function Messages() {
   }, [alertContent, history, updateMessages]);
 
   if (loading) {
-    return (
-        <LinearProgress />
-    );
+    return <LinearProgress />;
   }
 
   if (messages.length < 1) {
     return (
-      <EmptyPageContent page="Messages" message="Currently no messages have been created"/>
+      <EmptyPageContent
+        page="Messages"
+        message="Currently no messages have been created"
+      />
     );
   }
 

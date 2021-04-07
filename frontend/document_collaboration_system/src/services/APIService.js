@@ -6,11 +6,7 @@ class APIService {
   };
 
   postComment = async (document, body) => {
-    return await send_request(
-      "POST",
-      `documents/${document}/comments`,
-      body
-    );
+    return await send_request("POST", `documents/${document}/comments`, body);
   };
 
   postMessage = async (body) => {
@@ -18,10 +14,7 @@ class APIService {
   };
 
   getUsers = async (document) => {
-    return await send_request(
-      "GET",
-      `documents/${document}/collaborators`
-    );
+    return await send_request("GET", `documents/${document}/collaborators`);
   };
 
   getMessages = async () => {
