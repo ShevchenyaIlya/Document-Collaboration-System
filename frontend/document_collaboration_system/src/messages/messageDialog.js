@@ -12,6 +12,7 @@ import { TextField } from "@material-ui/core";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import api from "../services/APIService";
+import {fieldValidation, ValidationService} from "../services/ValidationService";
 
 export default function SendMessageDialog({
   openDialog,
@@ -38,34 +39,42 @@ export default function SendMessageDialog({
 
   const sendMessage = (users, messageText) => {
     api
-      .postMessage(JSON.stringify({ to_users: users, message: messageText }))
-      .then((response) => {
-        if (typeof response.message !== "undefined") {
-          alertContent.handler({
-            alertOpen: true,
-            alertMessage: response.message,
-            type: "error",
-          });
-        }
-      });
+        .postMessage(JSON.stringify({to_users: users, message: messageText}))
+        .then((response) => {
+          if (typeof response.message !== "undefined") {
+            alertContent.handler({
+              alertOpen: true,
+              alertMessage: response.message,
+              type: "error",
+            });
+          }
+        });
   };
 
   const handleSend = () => {
-    if (messageMode) {
-      if (message !== "" && choice !== "") {
-        sendMessage([choice], message);
-      }
-    } else {
-      let usersId = [];
-      for (let i = 0; i < users.length; i++) {
-        usersId.push(users[i]._id);
-      }
+    if (!fieldValidation(message, ValidationService.validateMessage)) {
+      if (messageMode) {
+        if (message !== "" && choice !== "") {
+          sendMessage([choice], message);
+        }
+      } else {
+        let usersId = [];
+        for (let i = 0; i < users.length; i++) {
+          usersId.push(users[i]._id);
+        }
 
-      if (message !== "") {
-        sendMessage(usersId, message);
+        if (message !== "") {
+          sendMessage(usersId, message);
+        }
       }
+      handleClose();
+    } else {
+      alertContent.handler({
+        alertOpen: true,
+        alertMessage: "Invalid message text",
+        type: "error",
+      });
     }
-    handleClose();
   };
 
   return (
@@ -107,6 +116,7 @@ export default function SendMessageDialog({
           fullWidth={true}
           multiline={true}
           value={message}
+          error={fieldValidation(message, ValidationService.validateMessage)}
           onChange={onChangeMessage}
         />
       </DialogContent>

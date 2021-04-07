@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import _ from "lodash";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -8,6 +8,9 @@ import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import api from "../services/APIService";
+import {fieldValidation, ValidationService} from "../services/ValidationService";
+import ValidationError from "../errors/ValidationError";
+import { AppContext } from "../";
 
 export default function EditCommentDialog({
   openedComment,
@@ -17,25 +20,46 @@ export default function EditCommentDialog({
   document,
 }) {
   const [newCommentText, commentChange] = useState("");
+  const {alertContent} = useContext(AppContext);
+
   const onChangeComment = useCallback(
     (event) => commentChange(event.target.value),
     []
   );
 
+  const inputFieldValidation = () => {
+    try {
+          ValidationService.validateComment(newCommentText);
+    } catch (e) {
+        if (e instanceof ValidationError) {
+            alertContent.handler({
+                alertOpen: true,
+                alertMessage: e.message,
+                type: "error",
+            });
+            return false;
+        }
+    }
+
+    return true;
+  };
+
   const updateCommentHandler = () => {
-    api
-      .updateComment(
-        document,
-        openedComment.comment._id,
-        JSON.stringify({ comment: newCommentText })
-      )
-      .then();
-    const commentIndex = _.findIndex(comments, function (element) {
-      return element._id === openedComment.comment._id;
-    });
-    comments[commentIndex].comment = newCommentText;
-    setComments(comments);
-    handleClose();
+    if (inputFieldValidation()) {
+      api
+          .updateComment(
+              document,
+              openedComment.comment._id,
+              JSON.stringify({comment: newCommentText})
+          )
+          .then();
+      const commentIndex = _.findIndex(comments, function (element) {
+        return element._id === openedComment.comment._id;
+      });
+      comments[commentIndex].comment = newCommentText;
+      setComments(comments);
+      handleClose();
+    }
   };
 
   const deleteCommentHandler = () => {
@@ -86,6 +110,7 @@ export default function EditCommentDialog({
               label="Comment"
               value={newCommentText}
               onChange={onChangeComment}
+              error={fieldValidation(newCommentText, ValidationService.validateComment)}
               fullWidth
               disabled={
                 openedComment.comment.author !==

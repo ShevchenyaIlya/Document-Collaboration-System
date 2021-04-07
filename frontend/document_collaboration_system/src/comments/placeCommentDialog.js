@@ -8,6 +8,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { AppContext } from "../";
 import api from "../services/APIService";
+import {fieldValidation, ValidationService} from "../services/ValidationService";
+import ValidationError from "../errors/ValidationError";
 
 export default function FormDialog({
   openModalWindow,
@@ -27,29 +29,48 @@ export default function FormDialog({
     setOpen(false);
   };
 
-  const handleLeave = () => {
-    api
-      .postComment(
-        document,
-        JSON.stringify({ comment: comment, target: selectedText })
-      )
-      .then((response_data) => {
-        if (response_data !== null) {
-          alertContent.handler({
-            alertOpen: true,
-            alertMessage: "Comments created!",
-            type: "success",
-          });
-        } else {
-          alertContent.handler({
-            alertOpen: true,
-            alertMessage: "Something went wrong!",
-            type: "error",
-          });
+  const inputFieldValidation = () => {
+    try {
+          ValidationService.validateComment(comment);
+    } catch (e) {
+        if (e instanceof ValidationError) {
+            alertContent.handler({
+                alertOpen: true,
+                alertMessage: e.message,
+                type: "error",
+            });
+            return false;
         }
-      });
-    setComment("");
-    handleClose();
+    }
+
+    return true;
+  };
+
+  const handleLeave = () => {
+    if (inputFieldValidation()) {
+      api
+          .postComment(
+              document,
+              JSON.stringify({comment: comment, target: selectedText})
+          )
+          .then((response_data) => {
+            if (response_data !== null) {
+              alertContent.handler({
+                alertOpen: true,
+                alertMessage: "Comments created!",
+                type: "success",
+              });
+            } else {
+              alertContent.handler({
+                alertOpen: true,
+                alertMessage: "Something went wrong!",
+                type: "error",
+              });
+            }
+          });
+      setComment("");
+      handleClose();
+    }
   };
 
   return (
@@ -71,6 +92,7 @@ export default function FormDialog({
             label="Comment message"
             type="text"
             fullWidth
+            error={fieldValidation(comment, ValidationService.validateComment)}
             value={comment}
             onChange={onChangeComment}
           />

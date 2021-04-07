@@ -3,26 +3,26 @@ import ValidationError from "../errors/ValidationError";
 
 export class ValidationService {
     static validateComment = (comment) => {
-        if (!comment.match(/^[a-zA-ZА-Яа-я0-9.!,-_ ]{1, 50}$/))
-            throw new ValidationError("Invalid middle name");
+        if (!comment.match(/^[a-zA-ZА-Яа-я0-9.!,_ ]{1,30}$/))
+            throw new ValidationError("Invalid comment text");
         return true;
     };
 
     static validateMessage = (message) => {
         if (!message.match(/^[a-zA-ZА-Яа-я0-9 .,-_?!]{1,100}$/))
-            throw new ValidationError("Invalid position");
+            throw new ValidationError("Invalid message text");
         return true;
     };
 
     static validateDocumentName = (document) => {
-        if (!document.match(/^[a-zA-ZА-Яа-я0-9 ]{1, 30}$/))
-            throw new ValidationError("Invalid middle name");
+        if (!document.match(/^[a-zA-ZА-Яа-я0-9 ]{1,30}$/))
+            throw new ValidationError("Invalid document name");
         return true;
     };
 
     static validateDocumentId = (identifier) => {
-        if (!identifier.match(/^[a-zA-Z0-9]{1, 30}$/))
-            throw new ValidationError("Invalid middle name");
+        if (!identifier.match(/^[a-zA-Z0-9]{1,30}$/))
+            throw new ValidationError("Invalid document identifier");
         return true;
     };
 
@@ -34,7 +34,7 @@ export class ValidationService {
 }
 
 export const fieldValidation = (value, validator) => {
-    try {
+        try {
         return !validator(value);
     } catch (e) {
         return true;
