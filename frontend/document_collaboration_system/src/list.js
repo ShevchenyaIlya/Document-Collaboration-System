@@ -4,7 +4,7 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import { useHistory } from "react-router-dom";
 import DocumentListItem from "./documentListItem";
-import api from "./service";
+import api from "./services/APIService";
 import { AppContext } from "./";
 
 const useStyles = makeStyles((theme) => ({

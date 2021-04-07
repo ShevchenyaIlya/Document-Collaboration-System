@@ -15,7 +15,7 @@ import {
 } from "react-router-dom";
 import CustomizedSnackbars from "./customAlert";
 import InviteSnackbar from "./inviteAlert";
-import api from "./service";
+import api from "./services/APIService";
 import Messages from "./chat";
 import { Error404 } from "./error";
 import Header from "./header";

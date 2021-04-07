@@ -4,7 +4,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import { TextField } from "@material-ui/core";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import api from "./service";
+import api from "./services/APIService";
 import { AppContext } from "./";
 
 export default function InviteUserDialog({ openDialog, setOpen, document }) {

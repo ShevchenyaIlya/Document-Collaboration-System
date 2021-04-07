@@ -6,7 +6,8 @@ import "./css/base.css";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "./";
 import InviteUserDialog from "./inviteUserDialog";
-import api from "./service";
+import api from "./services/APIService";
+
 
 export default function CustomMenu({ document, readOnly, setMode }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -74,6 +75,10 @@ export default function CustomMenu({ document, readOnly, setMode }) {
     navigator.clipboard.writeText("localhost:3000" + history.location.pathname);
   };
 
+  const saveDocumentVersion = () => {
+    console.log("Save");
+  };
+
   return (
     <div>
       <Button
@@ -91,6 +96,7 @@ export default function CustomMenu({ document, readOnly, setMode }) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        <MenuItem onClick={saveDocumentVersion}>Save</MenuItem>
         <MenuItem
           onClick={documentOperation("approve")}
           className="menuListItem"
