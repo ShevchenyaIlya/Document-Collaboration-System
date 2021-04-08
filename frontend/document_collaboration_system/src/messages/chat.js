@@ -18,9 +18,9 @@ function Messages() {
   const { alertContent } = useContext(AppContext);
   const history = useHistory();
 
-  const updateMessages = useCallback(() => {
+  const updateMessages = useCallback(async () => {
     setLoading(true);
-    api.getMessages().then((response) => {
+    await api.getMessages().then((response) => {
       if (response !== null) {
         if (!_.isEqual(response, messages)) {
           setMessages(response);

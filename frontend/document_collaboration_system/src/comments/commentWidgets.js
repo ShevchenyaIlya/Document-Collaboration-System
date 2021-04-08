@@ -14,8 +14,8 @@ export function CommentButton({ document }) {
   });
   const [comments, setComments] = useState([]);
 
-  const handleClickOpen = () => {
-    api.getComments(document).then((response_data) => {
+  const handleClickOpen = async () => {
+    await api.getComments(document).then((response_data) => {
       if (response_data !== null) {
         setComments(response_data);
       }

@@ -6,6 +6,11 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import api from "../services/APIService";
 import { AppContext } from "../";
+import {
+  fieldValidation,
+  ValidationService,
+} from "../services/ValidationService";
+import ValidationError from "../errors/ValidationError";
 
 export default function InviteUserDialog({ openDialog, setOpen, document }) {
   const [username, setUsername] = useState("");
@@ -20,18 +25,37 @@ export default function InviteUserDialog({ openDialog, setOpen, document }) {
     setUsername("");
   };
 
-  const inviteUser = () => {
-    const body = JSON.stringify({ document: document, username: username });
-    api.postInvite(body).then((response) => {
-      if (response !== null && typeof response.message !== "undefined") {
+  const inputFieldValidation = () => {
+    try {
+      ValidationService.validateUsername(username);
+    } catch (e) {
+      if (e instanceof ValidationError) {
         alertContent.handler({
           alertOpen: true,
-          alertMessage: response.message,
-          type: "warning",
+          alertMessage: e.message,
+          type: "error",
         });
+        return false;
       }
-    });
-    handleClose();
+    }
+
+    return true;
+  };
+
+  const inviteUser = async () => {
+    if (inputFieldValidation()) {
+      const body = JSON.stringify({ document: document, username: username });
+      await api.postInvite(body).then((response) => {
+        if (response !== null && typeof response.message !== "undefined") {
+          alertContent.handler({
+            alertOpen: true,
+            alertMessage: response.message,
+            type: "warning",
+          });
+        }
+      });
+      handleClose();
+    }
   };
 
   return (
@@ -50,6 +74,7 @@ export default function InviteUserDialog({ openDialog, setOpen, document }) {
           variant="outlined"
           fullWidth={true}
           value={username}
+          error={fieldValidation(username, ValidationService.validateUsername)}
           onChange={onChangeUsername}
         />
       </DialogContent>

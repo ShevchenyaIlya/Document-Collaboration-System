@@ -5,7 +5,7 @@ class APIService {
     return await send_request("POST", "login", body);
   };
 
-  userProfile= async () => {
+  userProfile = async () => {
     return await send_request("GET", "profile");
   };
 

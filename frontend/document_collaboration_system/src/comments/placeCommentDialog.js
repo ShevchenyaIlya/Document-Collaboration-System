@@ -49,9 +49,9 @@ export default function FormDialog({
     return true;
   };
 
-  const handleLeave = () => {
+  const handleLeave = async () => {
     if (inputFieldValidation()) {
-      api
+      await api
         .postComment(
           document,
           JSON.stringify({ comment: comment, target: selectedText })

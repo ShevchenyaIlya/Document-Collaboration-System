@@ -20,7 +20,7 @@ export class ValidationService {
   };
 
   static validateDocumentId = (identifier) => {
-    if (!identifier.match(/^[a-zA-Z0-9]{1,30}$/))
+    if (!identifier.match(/^[a-zA-Z0-9а-яА-Я ]{1,30}$/))
       throw new ValidationError("Invalid document identifier");
     return true;
   };

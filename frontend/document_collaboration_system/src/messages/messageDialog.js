@@ -40,8 +40,8 @@ export default function SendMessageDialog({
     setOpen(false);
   };
 
-  const sendMessage = (users, messageText) => {
-    api
+  const sendMessage = async (users, messageText) => {
+    await api
       .postMessage(JSON.stringify({ to_users: users, message: messageText }))
       .then((response) => {
         if (typeof response.message !== "undefined") {

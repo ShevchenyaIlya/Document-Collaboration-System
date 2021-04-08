@@ -60,11 +60,11 @@ function Login({ setUsername }) {
     return true;
   };
 
-  const handler = (event) => {
+  const handler = async (event) => {
     event.preventDefault();
 
     if (inputFieldValidation()) {
-      api
+      await api
         .userLogin(JSON.stringify({ username: textField }))
         .then((response_data) => {
           if (response_data === null) {
@@ -89,6 +89,7 @@ function Login({ setUsername }) {
         });
     }
   };
+
   return (
     <Paper elevation={3} className={classes.root}>
       <form noValidate autoComplete="on" onSubmit={handler}>

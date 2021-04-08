@@ -12,8 +12,8 @@ export function MessageButton({ document }) {
   const [personalMode, setMessageMode] = useState(true);
   const [users, setUsers] = useState([]);
 
-  const personalMessage = (value) => () => {
-    api.getUsers(document).then((response) => {
+  const personalMessage = (value) => async () => {
+    await api.getUsers(document).then((response) => {
       if (response !== null) {
         setUsers(response);
       }

@@ -24,18 +24,16 @@ export default function InviteSnackbar({ notification }) {
     });
   };
 
-  const undoInvite = () => {
-    api.deleteInvite(notification.inviteId).then();
+  const undoInvite = async () => {
+    await api.deleteInvite(notification.inviteId);
     closeSnackbar();
   };
 
-  const confirmInvite = () => {
-    api
-      .approveInvite(
-        notification.inviteId,
-        JSON.stringify({ document_id: notification.documentId })
-      )
-      .then();
+  const confirmInvite = async () => {
+    await api.approveInvite(
+      notification.inviteId,
+      JSON.stringify({ document_id: notification.documentId })
+    );
     closeSnackbar();
   };
 

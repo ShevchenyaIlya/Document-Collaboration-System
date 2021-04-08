@@ -65,8 +65,9 @@ export default function ControlledAccordions({ setDocument }) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const submitDocumentCreating = (event) => {
+  const submitDocumentCreating = async (event) => {
     event.preventDefault();
+
     if (sessionStorage.getItem("username") === null) {
       alertContent.handler({
         alertOpen: true,
@@ -76,7 +77,7 @@ export default function ControlledAccordions({ setDocument }) {
       history.push("/login");
     } else {
       if (inputFieldValidation()) {
-        api
+        await api
           .postDocument(JSON.stringify({ document_name: documentIdentifier }))
           .then((data) => {
             if (data !== null) {
@@ -104,8 +105,9 @@ export default function ControlledAccordions({ setDocument }) {
     }
   };
 
-  const submitDocumentOpening = (event) => {
+  const submitDocumentOpening = async (event) => {
     event.preventDefault();
+
     if (sessionStorage.getItem("username") === null) {
       alertContent.handler({
         alertOpen: true,
@@ -115,7 +117,7 @@ export default function ControlledAccordions({ setDocument }) {
       history.push("login");
     } else {
       if (inputFieldValidation()) {
-        api.getDocument(documentIdentifier).then((data) => {
+        await api.getDocument(documentIdentifier).then((data) => {
           if (data !== null) {
             history.push("/api/document/" + data.id);
           } else {
@@ -162,7 +164,7 @@ export default function ControlledAccordions({ setDocument }) {
                 value={documentIdentifier}
                 error={fieldValidation(
                   documentIdentifier,
-                  ValidationService.validateDocumentId
+                  ValidationService.validateDocumentName
                 )}
                 onChange={onChangeDocumentName}
               />

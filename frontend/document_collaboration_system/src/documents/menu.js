@@ -23,8 +23,8 @@ export default function CustomMenu({ document, readOnly, setMode }) {
     setAnchorEl(null);
   };
 
-  const documentOperation = (operation) => () => {
-    api.changeDocumentState(operation, document).then((response) => {
+  const documentOperation = (operation) => async () => {
+    await api.changeDocumentState(operation, document).then((response) => {
       if (response === null) {
         alertContent.handler({
           alertOpen: true,
@@ -51,8 +51,8 @@ export default function CustomMenu({ document, readOnly, setMode }) {
     handleClose();
   };
 
-  const handleDocumentDeleting = () => {
-    api.deleteDocument(document).then((response) => {
+  const handleDocumentDeleting = async () => {
+    await api.deleteDocument(document).then((response) => {
       if (response !== null && typeof response.message !== "undefined") {
         alertContent.handler({
           alertOpen: true,

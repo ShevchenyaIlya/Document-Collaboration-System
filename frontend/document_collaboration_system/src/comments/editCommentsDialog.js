@@ -47,15 +47,13 @@ export default function EditCommentDialog({
     return true;
   };
 
-  const updateCommentHandler = () => {
+  const updateCommentHandler = async () => {
     if (inputFieldValidation()) {
-      api
-        .updateComment(
-          document,
-          openedComment.comment._id,
-          JSON.stringify({ comment: newCommentText })
-        )
-        .then();
+      await api.updateComment(
+        document,
+        openedComment.comment._id,
+        JSON.stringify({ comment: newCommentText })
+      );
       const commentIndex = _.findIndex(comments, function (element) {
         return element._id === openedComment.comment._id;
       });
@@ -65,8 +63,8 @@ export default function EditCommentDialog({
     }
   };
 
-  const deleteCommentHandler = () => {
-    api.deleteComment(document, openedComment.comment._id).then();
+  const deleteCommentHandler = async () => {
+    await api.deleteComment(document, openedComment.comment._id);
     _.remove(comments, function (element) {
       return element._id === openedComment.comment._id;
     });

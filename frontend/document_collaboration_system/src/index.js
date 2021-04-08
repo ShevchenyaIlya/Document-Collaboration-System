@@ -97,7 +97,7 @@ class Index extends React.Component {
                   <Login setUsername={this.updateState("nickname")} />
                 </Route>
                 <Route exact path="/profile">
-                  <Profile/>
+                  <Profile />
                 </Route>
                 <Route path="/api">
                   <Switch>

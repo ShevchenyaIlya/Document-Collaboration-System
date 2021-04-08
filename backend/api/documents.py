@@ -60,7 +60,7 @@ def modify_comment(document_id: str, comment_id: str) -> Tuple[Any, int]:
         service.delete_comment(comment_id)
     elif request.method == "PUT":
         body = request.get_json()
-        service.update_comment(comment_id, body["comment"])
+        service.update_comment(comment_id, body)
 
     return jsonify({}), 200
 

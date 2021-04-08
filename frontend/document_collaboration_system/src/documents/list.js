@@ -28,6 +28,17 @@ export default function SimpleList() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchData = async () => {
+      await api.getDocuments().then((data) => {
+        if (data !== null) {
+          setDocuments(data);
+        } else {
+          history.push("/login");
+        }
+        setLoading(false);
+      });
+    };
+
     if (sessionStorage.getItem("token") === null) {
       alertContent.handler({
         alertOpen: true,
@@ -37,14 +48,7 @@ export default function SimpleList() {
       history.push("/login");
     } else {
       setLoading(true);
-      api.getDocuments().then((data) => {
-        if (data !== null) {
-          setDocuments(data);
-        } else {
-          history.push("/login");
-        }
-        setLoading(false);
-      });
+      fetchData().then();
     }
   }, []);
 

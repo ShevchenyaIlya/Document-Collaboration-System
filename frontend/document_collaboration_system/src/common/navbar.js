@@ -89,7 +89,11 @@ function Navbar() {
         </Typography>
         {username ? (
           <>
-            <Button variant={"contained"} className={classes.menuButton} onClick={moveProfile}>
+            <Button
+              variant={"contained"}
+              className={classes.menuButton}
+              onClick={moveProfile}
+            >
               <AccountCircleIcon /> {username}
             </Button>
             <Button variant={"contained"} onClick={logoutUser}>
