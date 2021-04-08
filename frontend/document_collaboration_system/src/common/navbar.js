@@ -56,6 +56,11 @@ function Navbar() {
     history.push("/");
   };
 
+  const moveProfile = (event) => {
+    event.preventDefault();
+    history.push("/profile");
+  };
+
   useEffect(() => {
     setUsername(sessionStorage.getItem("username"));
   }, []);
@@ -84,7 +89,7 @@ function Navbar() {
         </Typography>
         {username ? (
           <>
-            <Button variant={"contained"} className={classes.menuButton}>
+            <Button variant={"contained"} className={classes.menuButton} onClick={moveProfile}>
               <AccountCircleIcon /> {username}
             </Button>
             <Button variant={"contained"} onClick={logoutUser}>
@@ -98,33 +103,6 @@ function Navbar() {
         )}
       </Toolbar>
     </AppBar>
-    // <nav className="navbar">
-    //   <div>
-    //     <Link className="active link" to="/">
-    //       <i className="fa fa-fw fa-home"></i> Home
-    //     </Link>
-    //     <Link className="link" to="/api/documents">
-    //       <i className="fa fa-fw fa-book"></i> Documents
-    //     </Link>
-    //     <Link className="link" to="/api/messages">
-    //       <i className="fa fa-fw fa-comments"></i> Messages
-    //     </Link>
-    //     {username ? (
-    //       <>
-    //         <Link className="link right" to="#" onClick={logoutUser}>
-    //           <i className="fa fa-sign-out"></i> Log out
-    //         </Link>
-    //         <Link className="link right" to="#" onClick={logoutUser}>
-    //           <i className="fa fa-fw fa-user-circle"></i> {username}
-    //         </Link>
-    //       </>
-    //     ) : (
-    //       <Link className="link right" to="/login">
-    //         <i className="fa fa-fw fa-user"></i> Sign In
-    //       </Link>
-    //     )}
-    //   </div>
-    // </nav>
   );
 }
 

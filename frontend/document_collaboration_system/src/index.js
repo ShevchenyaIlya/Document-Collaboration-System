@@ -16,6 +16,7 @@ import { Error404 } from "./common/error";
 import Header from "./common/header";
 import Navbar from "./common/navbar";
 import Main from "./main";
+import Profile from "./auth/profile";
 
 export const AppContext = createContext();
 
@@ -94,6 +95,9 @@ class Index extends React.Component {
               <Switch>
                 <Route exact path="/login">
                   <Login setUsername={this.updateState("nickname")} />
+                </Route>
+                <Route exact path="/profile">
+                  <Profile/>
                 </Route>
                 <Route path="/api">
                   <Switch>
