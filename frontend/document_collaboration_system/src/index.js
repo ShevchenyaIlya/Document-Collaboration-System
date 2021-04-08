@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React, {createContext, useState} from "react";
 import ReactDOM from "react-dom";
 import "./css/index.css";
 import App from "./App";
@@ -17,8 +17,40 @@ import Header from "./common/header";
 import Navbar from "./common/navbar";
 import Main from "./main";
 import Profile from "./auth/profile";
+import { ThemeProvider } from "@material-ui/styles";
+import {
+  createMuiTheme
+} from "@material-ui/core";
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import Brightness3Icon from "@material-ui/icons/Brightness3";
 
 export const AppContext = createContext();
+
+export default function Application() {
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  const [darkState, setDarkState] = useState(prefersDark);
+  const palletType = darkState ? "dark" : "light";
+  const icon = darkState ? <Brightness7Icon /> : <Brightness3Icon />;
+
+  const darkTheme = createMuiTheme({
+    palette: {
+      type: palletType,
+    }
+  });
+
+  const handleThemeChange = () => {
+    setDarkState(!darkState);
+  };
+
+  return (
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline/>
+      <Index changeTheme={handleThemeChange} icon={icon}/>
+    </ThemeProvider>
+  );
+}
 
 class Index extends React.Component {
   constructor(props) {
@@ -90,6 +122,8 @@ class Index extends React.Component {
             <Navbar
               afterLoginUsername={this.state.nickname}
               setAfterLoginUsername={this.updateState("nickname")}
+              changeTheme={this.props.changeTheme}
+              icon={this.props.icon}
             />
             <main>
               <Switch>
@@ -135,6 +169,6 @@ class Index extends React.Component {
   }
 }
 
-ReactDOM.render(<Index />, document.getElementById("root"));
+ReactDOM.render(<Application />, document.getElementById("root"));
 
 reportWebVitals();

@@ -14,6 +14,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Tooltip from "@material-ui/core/Tooltip";
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Navbar() {
+function Navbar({icon, changeTheme}) {
   const classes = useStyles();
   const history = useHistory();
   const { name, alertContent } = useContext(AppContext);
@@ -89,13 +90,26 @@ function Navbar() {
         </Typography>
         {username ? (
           <>
-            <Button
-              variant={"contained"}
-              className={classes.menuButton}
-              onClick={moveProfile}
-            >
-              <AccountCircleIcon /> {username}
-            </Button>
+            <Tooltip title='Change site theme'>
+              <IconButton
+                edge="end"
+                color="inherit"
+                aria-label="mode"
+                onClick={changeTheme}
+                className={classes.menuButton}
+              >
+                {icon}
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='Open profile'>
+              <Button
+                variant={"contained"}
+                className={classes.menuButton}
+                onClick={moveProfile}
+              >
+                <AccountCircleIcon /> {username}
+              </Button>
+            </Tooltip>
             <Button variant={"contained"} onClick={logoutUser}>
               <ExitToAppIcon /> Log out
             </Button>

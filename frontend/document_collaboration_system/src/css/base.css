@@ -6,7 +6,7 @@ body {
 header {
     padding: 60px;
     text-align: center;
-    background-image: linear-gradient(to bottom right, blue, white);
+    background-image: linear-gradient(to bottom right, blue, rgb(200, 200, 200));
     color: black;
     font-size: 30px;
 }
@@ -53,5 +53,12 @@ main {
 @media screen and (max-width: 1000px) {
     main {
         margin: 0;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    header {
+        background-image: linear-gradient(to bottom right, blue, rgb(32,32,32));
+        color: white;
     }
 }
