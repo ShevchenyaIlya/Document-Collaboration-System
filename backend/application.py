@@ -1,16 +1,15 @@
 import os
 
+from api.auth import auth
+from api.documents import document_api
+from api.invites import invite_api
+from api.messages import message_api
+from config import CONFIG
 from flask import Flask, Response, jsonify
 from flask_jwt_extended import JWTManager
 from flask_socketio import SocketIO, emit, send
-
-from .api.auth import auth
-from .api.documents import document_api
-from .api.invites import invite_api
-from .api.messages import message_api
-from .config import CONFIG
-from .http_exception import HTTPException
-from .services.email_sender import mail
+from http_exception import HTTPException
+from services.email_sender import mail
 
 
 def create_flask_app() -> Flask:
@@ -28,21 +27,26 @@ def create_flask_app() -> Flask:
     return application
 
 
-app = create_flask_app()
-jwt = JWTManager(app)
+application = create_flask_app()
+jwt = JWTManager(application)
 
 
-@app.errorhandler(HTTPException)
+@application.errorhandler(HTTPException)
 def handle_invalid_usage(error: HTTPException) -> Response:
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
 
 
-@app.after_request
+@application.after_request
 def after_request(response: Response) -> Response:
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
 
     return response
+
+
+if __name__ == "__main__":
+    application.debug = True
+    application.run()

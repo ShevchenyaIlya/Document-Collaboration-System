@@ -97,7 +97,7 @@ class Index extends React.Component {
       session_token: sessionStorage.getItem("token"),
       username: sessionStorage.getItem("username"),
     });
-    // this.timer = setInterval(() => this.loadNotification(), 10000);
+    this.loadNotification();
   }
 
   componentWillUnmount() {

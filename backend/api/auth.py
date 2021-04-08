@@ -2,8 +2,7 @@ from typing import Any, Tuple
 
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
-
-from backend.services import users_service as service
+from services import users_service as service
 
 auth: Blueprint = Blueprint('auth', __name__)
 

@@ -1,10 +1,9 @@
 from typing import Dict
 
 from flask_jwt_extended import create_access_token
-
-from backend.http_exception import HTTPException
-from backend.mongodb_handler import mongo
-from backend.role import role_validation
+from http_exception import HTTPException
+from mongodb_handler import mongo
+from role import role_validation
 
 
 def user_login(body: Dict) -> Dict:

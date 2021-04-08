@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple, cast
 
-from backend.http_exception import HTTPException
-from backend.mongodb_handler import mongo
+from http_exception import HTTPException
+from mongodb_handler import mongo
 
 
 def create_message(body: Dict, user_id: str) -> Dict:
