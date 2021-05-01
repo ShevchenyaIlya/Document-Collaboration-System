@@ -3,50 +3,22 @@ body {
     min-height: 100%;
 }
 
-.header {
-    padding: 40px;
+header {
+    padding: 60px;
     text-align: center;
-    background-image: linear-gradient(to bottom right, blue, white);
+    background-image: linear-gradient(to bottom right, blue, rgb(200, 200, 200));
     color: black;
     font-size: 30px;
 }
 
-.footer {
+footer {
     padding: 20px;
     text-align: center;
     background-image: linear-gradient(to bottom right, white, blue);
 }
 
-.navbar {
-    width: 100%;
-    background-color: dimgray;
-    overflow: auto;
-}
-
-.navbar div {
-    margin-left: 50px;
-    margin-right: 50px;
-}
-
-.navbar .link {
-    float: left;
-    text-align: center;
-    padding: 12px;
-    color: white;
-    text-decoration: none;
-    font-size: 17px;
-}
-
-.navbar .link:hover {
-    background-color:rgba(0, 0, 0, 0.5);
-}
-
-.active {
-    background-color: darkslategray;
-}
-
-.navbar .link.right {
-    float: right;
+main {
+    margin: 0 300px;
 }
 
 .createDocument {
@@ -60,19 +32,9 @@ body {
 }
 
 .editorContainer {
-    width: 60%;
-    margin: 30px auto;
+    width: 100%;
+    margin: auto;
     min-height: 1000px
-}
-
-#menuButton {
-    min-width: 140px;
-    float: left;
-    margin: 10px;
-}
-
-.menuListItem {
-    min-width: 140px;
 }
 
 #customEditorButton {
@@ -84,21 +46,19 @@ body {
     cursor: pointer;
 }
 
-.commentsButtonContainer {
-    float: right;
-}
-
-.errorPage h1, h2{
-    text-align: center;
-}
-
 .chat {
     min-height: 600px;
 }
 
-@media screen and (max-width: 500px) {
-    .navbar a {
-        float: none;
-        display: block;
+@media screen and (max-width: 1000px) {
+    main {
+        margin: 0;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    header {
+        background-image: linear-gradient(to bottom right, blue, rgb(32,32,32));
+        color: white;
     }
 }

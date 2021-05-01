@@ -1,9 +1,8 @@
 from typing import Any, Tuple
 
+import services.documents_service as service
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
-
-import backend.services.documents_service as service
 
 document_api = Blueprint('document_api', __name__)
 
@@ -60,7 +59,7 @@ def modify_comment(document_id: str, comment_id: str) -> Tuple[Any, int]:
         service.delete_comment(comment_id)
     elif request.method == "PUT":
         body = request.get_json()
-        service.update_comment(comment_id, body["comment"])
+        service.update_comment(comment_id, body)
 
     return jsonify({}), 200
 

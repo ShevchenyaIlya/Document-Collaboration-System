@@ -1,9 +1,8 @@
 from typing import Any, Tuple
 
+import services.invites_service as service
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
-
-import backend.services.invites_service as service
 
 invite_api = Blueprint('invite_api', __name__)
 

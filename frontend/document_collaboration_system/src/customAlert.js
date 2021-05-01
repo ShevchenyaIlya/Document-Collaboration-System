@@ -26,7 +26,7 @@ export default function CustomizedSnackbars() {
       return;
     }
 
-    handler({ alertOpen: false, alertMessage: "", type: type });
+    handler({ alertOpen: false, alertMessage: alertMessage, type: type });
   };
 
   return (

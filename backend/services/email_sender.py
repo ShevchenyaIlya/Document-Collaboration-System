@@ -2,8 +2,7 @@ from multiprocessing import Pool
 from typing import Dict, cast
 
 from flask_mail import Mail, Message
-
-from backend.mongodb_handler import mongo
+from mongodb_handler import mongo
 
 mail = Mail()
 

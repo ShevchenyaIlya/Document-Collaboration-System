@@ -1,9 +1,8 @@
 from typing import Dict, Optional, Tuple, cast
 
-from backend.http_exception import HTTPException
-from backend.mongodb_handler import mongo
-
-from .email_sender import send_single_mail
+from http_exception import HTTPException
+from mongodb_handler import mongo
+from services.email_sender import send_single_mail
 
 
 def get_invites(user_id: str) -> Dict:

@@ -1,11 +1,10 @@
 from typing import Any, Dict, List, cast
 
-from backend.document_status import Status
-from backend.http_exception import HTTPException
-from backend.mongodb_handler import mongo
-from backend.role import Role
-
-from .email_sender import send_email
+from document_status import Status
+from http_exception import HTTPException
+from mongodb_handler import mongo
+from role import Role
+from services.email_sender import send_email
 
 
 def create_document(body: Dict, user_id: str) -> str:
